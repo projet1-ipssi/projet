@@ -47,4 +47,9 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getEventByDate($now){
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.endDate < :now')
+            ->setParameter('now',$now);
+    }
 }
