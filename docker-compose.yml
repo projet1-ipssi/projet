@@ -5,7 +5,7 @@ services:
     image: webdevops/php-nginx:7.3
     working_dir: /app
     ports:
-      - 80:80
+      - 8000:80
     depends_on:
       - database
     volumes:
@@ -22,7 +22,7 @@ services:
       - ./docker/mysqlconf:/etc/mysql/conf.d
       - ./docker/mysql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: symfonydemo
+      MYSQL_DATABASE: projet1
       MYSQL_ROOT_PASSWORD: root
 
   phpmyadmin:
@@ -34,3 +34,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       PMA_HOST: database
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
