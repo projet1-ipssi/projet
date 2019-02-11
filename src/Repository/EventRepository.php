@@ -48,8 +48,23 @@ class EventRepository extends ServiceEntityRepository
     }
     */
     public function getEventByDate($now){
-        return $this->createQueryBuilder('e')
+         $query = $this->createQueryBuilder('e')
             ->andWhere('e.endDate >= :now')
-            ->setParameter('now',$now);
+            ->setParameter('now',$now)
+            ->orderBy('e.startDate', 'ASC');
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function getEventByTitle($title, $now){
+        $query= $this->createQueryBuilder('e')
+            ->andWhere('e.endDate >= :now')
+            ->andWhere('e.title LIKE :title')
+            ->setParameter('title','%'.$title.'%')
+            ->setParameter('now',$now)
+            ->orderBy('e.startDate', 'ASC');
+
+        return $query->getQuery()
+            ->getResult();
     }
 }
