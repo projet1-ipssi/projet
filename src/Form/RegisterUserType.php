@@ -19,7 +19,7 @@ class RegisterUserType extends AbstractType
         $builder
             ->add('firstname')
             ->add('lastname')
-            ->add('birthday', DateType::class,[
+            ->add('birthdate', DateType::class,[
                 'widget' => 'single_text',
                 //'html5' => false,
             ])
