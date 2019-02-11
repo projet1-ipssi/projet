@@ -52,7 +52,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="simple_array")
      */
-    private $roles = [];
+    private $roles;
 
     public function __construct()
     {
