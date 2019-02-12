@@ -14,6 +14,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EventController extends AbstractController
 {
+
+    protected function prepareResult(Event $event )
+    {
+        $vote = false;
+        $user = $this->getUser();
+        if ($user){
+            $comment = $this->getDoctrine()->getRepository(Comments::class)->findOneBy(['user'=>$user, 'event'=>$event]);
+            if ($comment){
+                $vote = true;
+            }
+        }
+        return [
+            'html' => $this->renderView('home/event.html.twig', [
+                'event' => $event,
+                'vote'=>$vote
+            ])
+        ];
+    }
+
     /**
      * @Route("/event/profile-{id}", name="event_profile")
      */
@@ -68,5 +87,71 @@ class EventController extends AbstractController
         }
 
         return $this->redirectToRoute('event_profile', ['id'=>$id]);
+    }
+
+    /**
+     * @Route("/event-rating", name="eventRating")
+     */
+    public function EventWithRating(CommentsRepository $commentsRepository)
+    {
+        return $this->render('event/event_rating.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
+    /**
+     * @Route("/event-without-rating", name="eventWithoutRating")
+     */
+    public function EventWithoutRating(CommentsRepository $commentsRepository)
+    {
+        return $this->render('event/event_without_rating.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
+    /**
+     * @Route("/event_rating/ajax", name="event_ajax_rating")
+     */
+    public function EventAjax(Request $request, CommentsRepository $commentsRepository){
+
+        $now = new \DateTime();
+        $title = $request->get('title');
+        $results=[];
+
+        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now);
+        foreach ($events as $event){
+                $comments = $commentsRepository->findOneBy(['event'=>$event]);
+                if ($comments){
+                    $results[] = $this->prepareResult($event);
+                }
+        }
+
+        return $this->json([
+            'results' => $results,
+            'title'=>$title
+        ]);
+    }
+
+    /**
+     * @Route("/event-without-rating/ajax", name="event_ajax_without_rating")
+     */
+    public function EventAjaxWithoutRating(Request $request, CommentsRepository $commentsRepository){
+
+        $now = new \DateTime();
+        $title = $request->get('title');
+        $results=[];
+
+        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now);
+        foreach ($events as $event){
+            $comments = $commentsRepository->findOneBy(['event'=>$event]);
+            if (!$comments){
+                $results[] = $this->prepareResult($event);
+            }
+        }
+
+        return $this->json([
+            'results' => $results,
+            'title'=>$title
+        ]);
     }
 }

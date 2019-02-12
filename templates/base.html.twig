@@ -39,9 +39,15 @@
         {% endif %}
         {% if is_granted('ROLE_USER') %}
             <a class="navbar waves-effect" style="margin: auto;" href="" target="_blank">
-                <strong class="blue-text">My accaunt</strong>
+                <strong class="blue-text">My account</strong>
             </a>
         {% endif %}
+        <a class="navbar waves-effect" style="margin: auto;" href="{{ path('eventRating') }}" target="_blank">
+            <strong class="red-text">Conferences with rating</strong>
+        </a>
+        <a class="navbar waves-effect" style="margin: auto;" href="{{ path('eventWithoutRating') }}" target="_blank">
+            <strong class="red-text">Conferences without rating</strong>
+        </a>
     </div>
 
     <div class="">
