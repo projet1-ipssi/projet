@@ -16,11 +16,10 @@ var HomeEvent = function () {
                 title: title.val()
             },
             success: function (data) {
-                console.log(data);
 
                 data.results.map(function (result) {
                     $('.home-event-js').append(result.html)
-                })
+                });
             },
             error:function (data) {
                 console.log('error');
@@ -28,7 +27,7 @@ var HomeEvent = function () {
 
         })
     }
-}
+};
 
 $('.js-event-search-submit').click(function () {
     $('.home-event-js div').remove();

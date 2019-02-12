@@ -21,7 +21,8 @@
 .idea/
 /.docker-compose.override.yml
 /docker/mysql
-docker-compose.yml
+/!docker-compose.yml
+!docker-compose.yml
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs

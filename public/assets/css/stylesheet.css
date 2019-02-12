@@ -1,0 +1,16 @@
+.environment-rating-stars{
+    display: inline-block;
+    margin-right: 5px;
+}
+
+#environment-work-rating{
+    padding-left: 0px;
+    flex-direction: row;
+    align-items: center;
+    list-style: none;
+    font-size: 30px;
+}
+
+.hidden{
+display: none;
+}

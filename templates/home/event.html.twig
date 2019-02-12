@@ -7,7 +7,7 @@
 
                 <!-- Featured image -->
                 <div class="view overlay rounded z-depth-2 mb-4">
-                    <img class="img-fluid" src="{{ event.picture }}" alt="Sample image">
+                    <img class="img-fluid" src="{% if event.picture != null %}{{ event.picture }} {% endif %}" alt="Sample image">
                     <a>
                         <div class="mask rgba-white-slight"></div>
                     </a>
@@ -21,7 +21,7 @@
                 <!-- Excerpt -->
                 <p class="dark-grey-text">{{ event.description }}</p>
                 <!-- Read more button -->
-                <a class="btn btn-pink btn-rounded btn-md">Read more</a>
+                <a class="btn btn-pink btn-rounded btn-md" href="{{ path('event_profile', {'id':event.id}) }}">Voter</a>
 
             </div>
             <!-- Grid column -->
