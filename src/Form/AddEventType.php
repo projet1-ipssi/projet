@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,13 +18,11 @@ class AddEventType extends AbstractType
         $builder
             ->add('title')
             ->add('picture')
-            ->add('startDate', DateType::class,[
+            ->add('startDate', DateTimeType::class,[
                 'widget' => 'single_text',
-                //'html5' => false,
             ])
-            ->add('endDate', DateType::class,[
+            ->add('endDate', DateTimeType::class,[
                 'widget' => 'single_text',
-                //'html5' => false,
             ])
             ->add('description', TextareaType::class, array('required' => false))
             ->add('submit', SubmitType::class)
