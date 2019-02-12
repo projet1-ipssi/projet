@@ -33,8 +33,14 @@ class AdminController extends AbstractController
     public function index()
     {
         $namepage = 'Dashboard';
+
+        $users = $this->userRepository->findLastUsers();
+        $events = $this->eventRepository->findAll();
+
         return $this->render('admin/dashboard.html.twig', [
             'namepage' => $namepage,
+            'users' => $users,
+            'events' => $events,
         ]);
     }
 
@@ -50,12 +56,13 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
+            +
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Your profile update successfully !');
-            return $this->redirectToRoute('admin-profile');
+            return $this->redirectToRoute('admin');
         }
-        return $this->render('admin/user/profile.html.twig', [
+        return $this->render('admin/profile/profile.html.twig', [
             'form' => $form->createView(),
             'namepage' => $namepage,
         ]);
@@ -161,10 +168,17 @@ class AdminController extends AbstractController
         $namepage = 'Add Event';
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($event);
-            $this->em->flush();
-            $this->addFlash('success', 'Event added successfully !');
-            return $this->redirectToRoute('admin');
+            if ($event->getStartDate() == $event->getEndDate()) {
+                $this->addFlash('danger', 'The end date of the event must be different from the start date !');
+            } elseif ($event->getStartDate() > $event->getEndDate()) {
+                $this->addFlash('danger', 'The event end date must be upper than the start date.!');
+            } else {
+                $this->em->persist($event);
+                $this->em->flush();
+                $this->addFlash('success', 'Event added successfully !');
+                return $this->redirectToRoute('admin');
+            }
+
         }
 
         return $this->render('admin/event/add.html.twig', [
