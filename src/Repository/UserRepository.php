@@ -47,4 +47,14 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findLastUsers()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->orderBy('u.id', 'DESC')
+            ->getQuery()
+            ->setMaxResults(3)
+            ->getResult();
+    }
 }
