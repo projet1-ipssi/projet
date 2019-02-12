@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block body %}
+    <!-- Section: Blog v.2 -->
+    <section class="text-center my-5" style="width: 90%; margin: auto;">
+
+        <!-- Section heading -->
+        <h2 class="h1-responsive font-weight-bold my-5">Conferences without rating</h2>
+        <!-- Section description -->
+        <p class="dark-grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate velit
+            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+            qui officia deserunt mollit anim id est laborum.</p>
+
+        {% include 'search/search.html.twig' %}
+
+        <!-- Grid row -->
+        <div class="row home-event-js" data-endpoint="{{ path('event_ajax_without_rating') }}">
+
+
+        </div>
+        <!-- Grid row -->
+
+    </section>
+    <!-- Section: Blog v.2 -->
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pg-blue justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link">1</a></li>
+            <li class="page-item active">
+                <a class="page-link">2 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item"><a class="page-link">3</a></li>
+            <li class="page-item">
+                <a class="page-link">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+{% endblock %}

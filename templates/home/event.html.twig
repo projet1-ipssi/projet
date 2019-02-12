@@ -21,8 +21,11 @@
                 <!-- Excerpt -->
                 <p class="dark-grey-text">{{ event.description }}</p>
                 <!-- Read more button -->
+{% if vote == false %}
                 <a class="btn btn-pink btn-rounded btn-md" href="{{ path('event_profile', {'id':event.id}) }}">Voter</a>
-
+{% else %}
+    <strong>Vous avez déjà voté !</strong>
+                {% endif %}
             </div>
             <!-- Grid column -->
 

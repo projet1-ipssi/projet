@@ -6,6 +6,7 @@ use App\Entity\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Comments;
 
 class HomeController extends AbstractController
 {
@@ -14,6 +15,7 @@ class HomeController extends AbstractController
      */
     public function index()
     {
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
@@ -21,9 +23,18 @@ class HomeController extends AbstractController
 
     protected function prepareResult(Event $event )
     {
+        $vote = false;
+        $user = $this->getUser();
+        if ($user){
+            $comment = $this->getDoctrine()->getRepository(Comments::class)->findOneBy(['user'=>$user, 'event'=>$event]);
+            if ($comment){
+                $vote = true;
+            }
+        }
             return [
                 'html' => $this->renderView('home/event.html.twig', [
                     'event' => $event,
+                    'vote'=>$vote
                 ])
             ];
     }
