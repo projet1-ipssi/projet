@@ -16,7 +16,12 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.6.1/css/mdb.min.css" rel="stylesheet">
     {% endblock %}
 </head>
+
+{% if app.request.get('_route') == 'admin' %}
+<body class="grey lighten-3">
+{% else %}
 <body>
+{% endif %}
 <!-- Navbar -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
     <div class="container">
@@ -76,6 +81,8 @@
 
 
 <!-- Navbar -->
+
+{% block accountnavigation %}{% endblock %}
 
 {% block body %}{% endblock %}
 {% block javascripts %}

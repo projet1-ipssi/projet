@@ -1,0 +1,17 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ namepage }} {% endblock %}
+
+    {% block dashboard %}
+        <a href="{{ path('admin') }}" class="list-group-item waves-effect active">
+            <i class="fas fa-chart-pie mr-3"></i>{{ namepage }}
+        </a>
+    {% endblock %}
+
+    {% block namepage %}
+        <span>{{ namepage }}</span>
+    {% endblock %}
+
+{% block body %}
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}{{ namepage }}{% endblock %}
+
+{% block namepage %}
+    <span>{{ namepage }}</span>
+{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper" style="width: 55%; margin: auto; padding: 20px; background-color: #fff">
+        <h1 align="center"><strong>{{ namepage }} : {{ user.email }}</strong></h1>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.firstname) }}
+            {{ form_errors(form.firstname) }}
+            {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.firstname) }}
+        </div>
+
+        <div>
+            {{ form_label(form.lastname) }}
+            {{ form_errors(form.lastname) }}
+            {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.lastname) }}
+        </div>
+        <br>
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.email) }}
+        </div>
+
+        <div>
+            {{ form_label(form.birthdate) }}
+            {{ form_errors(form.birthdate) }}
+            {{ form_widget(form.birthdate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.birthdate) }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ form_label(form.password) }}
+            {{ form_errors(form.password) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-control h-75'}}) }}
+            {{ form_help(form.password) }}
+        </div>
+        <div>
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-info my-4 btn-block'}}) }}
+        </div>
+
+        {{ form_end(form) }}
+
+
+    </div>
+
+{% endblock %}

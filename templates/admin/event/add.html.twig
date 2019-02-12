@@ -1,0 +1,70 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}{{ namepage }}{% endblock %}
+
+                {% block addevent %}
+                    <a href="{{ path('add-event') }}"
+                       class="list-group-item list-group-item-action waves-effect active">
+                        <i class="fas fa-user mr-3"></i>{{ namepage }}</a>
+                {% endblock %}
+
+{% block namepage %}
+    <span>{{ namepage }}</span>
+{% endblock %}
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="example-wrapper" style="width: 55%; margin: auto; padding: 20px; background-color: #fff">
+        <h1 align="center"><strong>{{ namepage }}</strong></h1>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.title) }}
+            {{ form_errors(form.title) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.title) }}
+        </div>
+
+        <div>
+            {{ form_label(form.startDate) }}
+            {{ form_errors(form.startDate) }}
+            {{ form_widget(form.startDate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.startDate) }}
+        </div>
+        <br>
+        <div>
+            {{ form_label(form.endDate) }}
+            {{ form_errors(form.endDate) }}
+            {{ form_widget(form.endDate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.endDate) }}
+        </div>
+
+        <div>
+            {{ form_label(form.picture) }}
+            {{ form_errors(form.picture) }}
+            {{ form_widget(form.picture, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.picture) }}
+        </div>
+        <br>
+        <div>
+            {{ form_label(form.description) }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form.description) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-info my-4 btn-block'}}) }}
+        </div>
+
+        {{ form_end(form) }}
+
+
+    </div>
+{% endblock %}
+
