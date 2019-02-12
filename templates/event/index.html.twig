@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EventController!{% endblock %}
+
+{% block body %}
+<section class="text-center my-5" style="width: 90%; margin: auto;">
+    <div class="col-lg-5 col-md-12 mb-lg-0 mb-4" style="margin-left: auto; margin-right: auto;">
+
+        <!-- Featured image -->
+        <div class="view overlay rounded z-depth-2 mb-4">
+            <img class="img-fluid" src="{% if event.picture != null %}{{ event.picture }} {% endif %}" alt="Sample image">
+            <a>
+                <div class="mask rgba-white-slight"></div>
+            </a>
+        </div>
+
+        <!-- Category -->
+        <!-- Post title -->
+        <h4 class="font-weight-bold mb-6"><strong>{{ event.title }}</strong></h4>
+        <!-- Post data -->
+        <p> du <a class="font-weight-bold">{{ event.startDate |date('d/m/Y') }}</a> au <a class="font-weight-bold">{{ event.endDate|date('d/m/Y') }}</a></p>
+        <!-- Excerpt -->
+        <p class="dark-grey-text">{{ event.description }}</p>
+        <!-- Read more button -->
+        {% if app.user %}
+            <form action="{{ path('event_rating', {'id':event.id}) }}">
+
+        <select class="hidden" data-selected="{{ rating }}" name="environment_rating" id="environment_rating">
+            {% for i in [1,2,3,4,5] %}
+                <option value="{{ i }}">{{ i }}/5</option>
+            {% endfor %}
+        </select>
+        <ul id="environment-work-rating">
+            {% for i in 1..5 %}
+                <li class="environment-rating-stars" data-value="{{ i }}">
+                    <i id="environment-rating-stars-{{ i }}" class="icon-star{% if i > rating %}-empty{% endif %}"></i>
+                </li>
+            {% endfor %}
+        </ul>
+            <input type="submit" value="Voter">
+            </form>
+            {% else %}
+<strong>Veuillez vous connecter pour pouvoir voter !</strong>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
