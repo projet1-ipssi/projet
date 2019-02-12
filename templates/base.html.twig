@@ -33,7 +33,7 @@
             <img src="" height="40px">
         </a>
         {% if is_granted('ROLE_ADMIN') %}
-            <a class="navbar waves-effect" style="margin: auto;" href="" target="_blank">
+            <a class="navbar waves-effect" style="margin: auto;" href="{{ path('admin') }}" target="_blank">
                 <strong class="red-text">Admin</strong>
             </a>
         {% endif %}

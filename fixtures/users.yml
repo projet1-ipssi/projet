@@ -1,0 +1,10 @@
+App\Entity\User:
+  user (template):
+    firstname: <firstName()>
+    lastname: <lastName()>
+    email: <email()>
+    birthdate: <dateTimeBetween('-70 years', '-10 years')>
+    password: <encodePassword(@self, 'azerty')>
+  user_{1} (extends user):
+    roles: [ROLE_ADMIN]
+  user_{2..10} (extends user):
