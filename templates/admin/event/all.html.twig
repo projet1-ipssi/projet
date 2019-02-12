@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}{{ namepage }}{% endblock %}
+
+{% block allevent %}
+    <a href="{{ path('all-event') }}" class="list-group-item list-group-item-action waves-effect active">
+        <i class="fas fa-user mr-3"></i>{{ namepage }}</a>
+{% endblock %}
+
+{% block namepage %}
+    <span>{{ namepage }}</span>
+{% endblock %}
+
+{% block body %}
+
+    <!-- List -->
+    <div class="card mb-3 wow fadeIn" style="width: 55%; margin: auto;">
+        <h1 align="center"><strong>{{ namepage }}</strong></h1>
+        <div class="card-body">
+            <div class="list-group">
+                {% for event in events %}
+                    <br>
+                    <button type="button" class="list-group-item list-group-item-action">{{ event.title }}
+                        <br>
+                        <a class="btn btn-success" href="{{ path('update-event', {'id': event.id}) }}">Update
+                            <i class="fa fa-refresh ml-2"></i>
+                        </a>
+                        <a class="btn btn-danger" href="{{ path('event-remove', {'id': event.id}) }}">Delete
+                            <i class="fa fa-trash ml-2"></i>
+                        </a>
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
