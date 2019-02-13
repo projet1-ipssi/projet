@@ -44,18 +44,14 @@
                         <tbody>
                         {% set id = 1 %}
                         {% for comment in comments %}
-                            {% for event in events %}
-                                {% if (comment.event.id == event.id) %}
-                                    <tr>
-                                        <th scope="row">{{ id }}</th>
-                                        <td> {{ event.title }} </td>
-                                        <td> {{ event.startDate|date }}</td>
-                                        <td> {{ event.endDate|date }} </td>
-                                        <td> {{ comment.rating }} </td>
-                                    </tr>
+                        <tr>
+                            <th scope="row">{{ id }}</th>
+                            <td> {{ comment.title }} </td>
+                            <td> {{ comment.startDate|date }}</td>
+                            <td> {{ comment.endDate|date }} </td>
+                            <td> {{ comment.average|round(1, 'floor') }}/5 </td>
+                        </tr>
                                     {% set id = id + 1 %}
-                                {% endif %}
-                            {% endfor %}
                         {% endfor %}
                         </tbody>
                         <!-- Table body -->

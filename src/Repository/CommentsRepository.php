@@ -48,6 +48,20 @@ class CommentsRepository extends ServiceEntityRepository
     }
     */
 
+    public function getTopTen()
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select("e.id, e.title, e.startDate, e.endDate, avg(c.rating) as average")
+            ->innerJoin('c.event','e')
+            ->groupBy('c.event')
+            ->orderBy('average', 'desc')
+            ->setMaxResults(10)
+        ;
+
+       return $query->getQuery()
+        ->getResult();
+    }
+
     public function topEvent()
     {
         return $this->createQueryBuilder('c')
