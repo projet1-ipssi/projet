@@ -47,4 +47,13 @@ class CommentsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getTopTen(){
+        $query = $this->createQueryBuilder('c')
+            ->select("avg(c.rating)")
+            ->orderBy('c.id');
+
+        $query->getQuery()
+            ->getResult();
+    }
 }
