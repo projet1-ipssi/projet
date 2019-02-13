@@ -1,7 +1,7 @@
 App\Entity\Event:
-  event_{1..10}:
+  event_{1..30}:
     title: <realText(25, 2)>
-    description: <realText(40, 2)>
+    description: <realText(600, 5)>
     picture: <imageUrl(640, 480)>
     startDate: <dateTimeBetween('now', '+20 days')>
     endDate: <dateTimeBetween('+20 days', '+1 years')>
