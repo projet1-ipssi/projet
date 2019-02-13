@@ -41,7 +41,7 @@ class AdminController extends AbstractController
         $lastUsers = $this->userRepository->findLastUsers();
         $users = $this->userRepository->findAll();
         $events = $this->eventRepository->findAll();
-        $comments = $this->commentsRepository->topEvent();
+        $comments = $this->commentsRepository->getTopTen();
 
         return $this->render('admin/dashboard.html.twig', [
             'namepage' => $namepage,
