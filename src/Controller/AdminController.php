@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\User;
 use App\Form\AddEventType;
 use App\Form\RegisterUserType;
+use App\Repository\CommentsRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +19,14 @@ class AdminController extends AbstractController
 {
     private $userRepository;
     private $eventRepository;
+    private $commentsRepository;
     private $em;
 
-    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, EntityManagerInterface $em)
+    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, CommentsRepository $commentsRepository, EntityManagerInterface $em)
     {
         $this->userRepository = $userRepository;
         $this->eventRepository = $eventRepository;
+        $this->commentsRepository = $commentsRepository;
         $this->em = $em;
     }
 
@@ -34,13 +37,17 @@ class AdminController extends AbstractController
     {
         $namepage = 'Dashboard';
 
-        $users = $this->userRepository->findLastUsers();
+        $lastUsers = $this->userRepository->findLastUsers();
+        $users = $this->userRepository->findAll();
         $events = $this->eventRepository->findAll();
+        $comments = $this->commentsRepository->topEvent();
 
         return $this->render('admin/dashboard.html.twig', [
             'namepage' => $namepage,
             'users' => $users,
+            'lastUsers' => $lastUsers,
             'events' => $events,
+            'comments' => $comments,
         ]);
     }
 
@@ -56,7 +63,6 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-            +
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Your profile update successfully !');
