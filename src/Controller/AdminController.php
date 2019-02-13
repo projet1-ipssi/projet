@@ -9,6 +9,7 @@ use App\Form\RegisterUserType;
 use App\Repository\CommentsRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -166,21 +167,30 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/event/add", name="add-event")
      */
-    public function addEvent(Request $request)
+    public function addEvent(Request $request, MailerService $mailerService, UserRepository $userRepository)
     {
         $event = new Event();
         $form = $this->createForm(AddEventType::class, $event);
         $form->handleRequest($request);
         $namepage = 'Add Event';
+        $now = new \DateTime();
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             if ($event->getStartDate() == $event->getEndDate()) {
                 $this->addFlash('danger', 'The end date of the event must be different from the start date !');
             } elseif ($event->getStartDate() > $event->getEndDate()) {
                 $this->addFlash('danger', 'The event end date must be upper than the start date.!');
-            } else {
+            }elseif ($event->getStartDate() <= $now) {
+                $this->addFlash('danger', 'The event start date must be upper than now.!');
+            }
+            else {
                 $this->em->persist($event);
                 $this->em->flush();
+                $users= $userRepository->findAll();
+                foreach ($users as $user){
+                    $mailerService->sendMail($user,$event);
+                }
                 $this->addFlash('success', 'Event added successfully !');
                 return $this->redirectToRoute('admin');
             }
