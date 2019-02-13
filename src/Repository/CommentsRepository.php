@@ -47,4 +47,14 @@ class CommentsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function topEvent()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->orderBy('c.rating', 'DESC')
+            ->getQuery()
+            ->setMaxResults(10)
+            ->getResult();
+    }
 }
