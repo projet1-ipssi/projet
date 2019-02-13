@@ -18,9 +18,10 @@
         <!-- Post title -->
         <h4 class="font-weight-bold mb-6"><strong>{{ event.title }}</strong></h4>
         <!-- Post data -->
-        <p> du <a class="font-weight-bold">{{ event.startDate |date('d/m/Y') }}</a> au <a class="font-weight-bold">{{ event.endDate|date('d/m/Y') }}</a></p>
+        <p> du <a class="font-weight-bold">{{ event.startDate |date('d/m/Y') }} </a>à <a class="font-weight-bold">{{ event.startDate |date('H:m') }} </a></p>
+        <p> au <a class="font-weight-bold">{{ event.endDate |date('d/m/Y') }} </a>à <a class="font-weight-bold">{{ event.endDate |date('H:m') }} </a> </p>
         <!-- Excerpt -->
-        <p class="dark-grey-text">{{ event.description }}</p>
+        <p class="dark-grey-text">{{ event.description|raw }}</p>
         <!-- Read more button -->
         {% if app.user %}
             <form action="{{ path('event_rating', {'id':event.id}) }}">
