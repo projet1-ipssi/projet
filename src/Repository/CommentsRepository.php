@@ -57,4 +57,14 @@ class CommentsRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getResult();
     }
+
+    public function userLastRate()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->orderBy('c.rating', 'DESC')
+            ->getQuery()
+            ->setMaxResults(5)
+            ->getResult();
+    }
 }

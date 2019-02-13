@@ -13,63 +13,61 @@
     {% endblock %}
 
 {% block body %}
-        <!--Grid column-->
-        <div class="col-md-6 mb-4 mx-auto w-75">
+    <!--Grid column-->
+    <div class="mb-4 mx-auto" style="width: 55%;">
 
-            <!--Card-->
-            <div class="card">
+        <!--Card-->
+        <div class="card">
 
-                <!--Card content-->
-                <div class="card-body">
-                    <h2 align="center">My Last Rated Event</h2>
-                    <!-- Table  -->
-                    <table class="table table-hover">
-                        <!-- Table head -->
-                        <thead class="blue-grey lighten-4">
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Date Start</th>
-                            <th>Date End</th>
-                            <th>Rate</th>
-                        </tr>
-                        </thead>
-                        <!-- Table head -->
+            <!--Card content-->
+            <div class="card-body">
+                <h2 align="center"><strong> My Last Rated Event </strong></h2>
+                <!-- Table  -->
+                <table class="table table-hover">
+                    <!-- Table head -->
+                    <thead class="blue-grey lighten-4">
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Date Start</th>
+                        <th>Date End</th>
+                        <th>Rate</th>
+                    </tr>
+                    </thead>
+                    <!-- Table head -->
 
-                        <!-- Table body -->
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td> Cell 1 </td>
-                                <td> Cell 2</td>
-                                <td> Cell 3 </td>
-                                <td> Cell 3 </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td> Cell 1 </td>
-                                <td> Cell 2</td>
-                                <td> Cell 3 </td>
-                                <td> Cell 3 </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td> Cell 1 </td>
-                                <td> Cell 2</td>
-                                <td> Cell 3 </td>
-                                <td> Cell 3 </td>
-                            </tr>
-                        </tbody>
-                        <!-- Table body -->
-                    </table>
-                    <!-- Table  -->
-
-                </div>
+                    <!-- Table body -->
+                    <tbody>
+                    <tbody>
+                    {% set id = 1 %}
+                    {% for comment in comments %}
+                        {% for event in events %}
+                            {% if (comment.event.id == event.id) %}
+                                {% if (user.id == comment.user.id) %}
+                                    <tr>
+                                        <th scope="row">{{ id }}</th>
+                                        <td> {{ event.title }} </td>
+                                        <td> {{ event.startDate|date }}</td>
+                                        <td> {{ event.endDate|date }} </td>
+                                        <td> {{ comment.rating }} </td>
+                                    </tr>
+                                    {% set id = id + 1 %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                    </tbody>
+                    <!-- Table body -->
+                </table>
+                <!-- Table  -->
 
             </div>
-            <!--/.Card-->
 
         </div>
-        <!--Grid column-->
+        <!--/.Card-->
+
+    </div>
+    <!--Grid column-->
 
 {% endblock %}

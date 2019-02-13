@@ -20,7 +20,7 @@
     {% endblock %}
 </head>
 
-{% if app.request.get('_route') == 'admin' %}
+{% if 'user' in app.request.uri or 'admin' in app.request.uri%}
 <body class="grey lighten-3">
 {% else %}
 <body>
@@ -29,8 +29,8 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
     <div class="container">
 
-        <a class="navbar-brand waves-effect" href="/" target="_blank">
-            <img src="" height="40px">
+        <a class="navbar-brand waves-effect" href="{{ path('home') }}">
+            <img src="{{ asset('logo/home.png') }}" height="45px">
         </a>
         {% if is_granted('ROLE_ADMIN') %}
             <a class="navbar waves-effect" style="margin: auto;" href="{{ path('admin') }}" target="_blank">
@@ -38,30 +38,30 @@
             </a>
         {% endif %}
         {% if is_granted('ROLE_USER') %}
-            <a class="navbar waves-effect" style="margin: auto;" href="" target="_blank">
+            <a class="navbar waves-effect" style="margin: auto;" href="{{ path('user') }}" target="_blank">
                 <strong class="blue-text">My account</strong>
             </a>
         {% endif %}
-        <a class="navbar waves-effect" style="margin: auto;" href="{{ path('eventRating') }}" target="_blank">
-            <strong class="red-text">Conferences with rating</strong>
+        <a style="margin: auto;"><strong></strong></a>
+        <a class="navbar waves-effect" href="{{ path('eventRating') }}">
+            <strong style="color:#00c851">Conferences with rating</strong>
         </a>
-        <a class="navbar waves-effect" style="margin: auto;" href="{{ path('eventWithoutRating') }}" target="_blank">
-            <strong class="red-text">Conferences without rating</strong>
+        <a class="navbar waves-effect" href="{{ path('eventWithoutRating') }}">
+            <strong class="grey-text">Conferences without rating</strong>
         </a>
     </div>
 
     <div class="">
         {% if is_granted('ROLE_USER') %}
-            Log in
-            <a style="font-size: 18px;" href="" target="_blank">
-                <strong class="blue-text"></strong>
+            <a style="font-size: 18px;" href="{{ path('user-profile') }}" target="_blank">
+                <strong class="blue-text">{{ app.user.email }}</strong>
             </a><br>
             <a style="font-size: 18px;" href="{{ path('logout') }}" target="_blank">
                 <strong class="blue-text">Log out</strong>
             </a>
         {% elseif is_granted('ROLE_ADMIN') %}
             Log in
-            <a style="font-size: 18px;" href="" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('admin-profile') }}" target="_blank">
                 <strong class="blue-text">{{ app.user.email }}</strong>
             </a><br>
             <a style="font-size: 18px;" href="{{ path('logout') }}" target="_blank">

@@ -1,5 +1,6 @@
 ###> symfony/framework-bundle ###
 /.env
+/.env.dist
 /var/cache/*
 /var/log/*
 /var/db/*
@@ -22,7 +23,7 @@
 /.docker-compose.override.yml
 /docker/mysql
 /!docker-compose.yml
-!docker-compose.yml
+/docker-compose.yml
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
