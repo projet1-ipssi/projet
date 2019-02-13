@@ -43,15 +43,15 @@
                         <!-- Table body -->
                         <tbody>
                         {% set id = 1 %}
-                        {% for event in events %}
-                            <tr>
-                                <th scope="row">{{ id }}</th>
-                                <td> {{ event.title }} </td>
-                                <td> {{ event.startDate|date }}</td>
-                                <td> {{ event.endDate|date }} </td>
-                                <td>Cell</td>
-                            </tr>
-                            {% set id = id + 1 %}
+                        {% for comment in comments %}
+                        <tr>
+                            <th scope="row">{{ id }}</th>
+                            <td> {{ comment.title }} </td>
+                            <td> {{ comment.startDate|date }}</td>
+                            <td> {{ comment.endDate|date }} </td>
+                            <td> {{ comment.average|round(1, 'floor') }}/5 </td>
+                        </tr>
+                                    {% set id = id + 1 %}
                         {% endfor %}
                         </tbody>
                         <!-- Table body -->
@@ -72,10 +72,10 @@
                 <span class="badge badge-primary badge-pill pull-right">{{ events|length }}</span>
             </a>
             <a class="list-group-item list-group-item-action waves-effect">Noted
-                <span class="badge badge-success badge-pill pull-right">22</span>
+                <span class="badge badge-success badge-pill pull-right">{{ comments|length }}</span>
             </a>
             <a class="list-group-item list-group-item-action waves-effect">Not noted
-                <span class="badge badge-danger badge-pill pull-right">5</span>
+                <span class="badge badge-danger badge-pill pull-right">{{ events|length-comments|length }}</span>
             </a>
             <a href="{{ path('all-users') }}" class="list-group-item list-group-item-action waves-effect">Users
                 <span class="badge badge-primary badge-pill pull-right">{{ users|length }}</span>
@@ -109,12 +109,18 @@
                         <!-- Table body -->
                         <tbody>
                         {% set id = 1 %}
-                        {% for user in users %}
+                        {% for lastUser in lastUsers %}
                             <tr>
-                                <th scope="row"><a href="{{ path('user-update', {'id': user.id}) }}">{{ id }}</a></th>
-                                <td><a href="{{ path('user-update', {'id': user.id}) }}"> {{ user.firstname }} </a></td>
-                                <td><a href="{{ path('user-update', {'id': user.id}) }}"> {{ user.lastname }} </a></td>
-                                <td><a href="{{ path('user-update', {'id': user.id}) }}"> {{ user.email }} </a></td>
+                                <th scope="row"><a href="{{ path('user-update', {'id': lastUser.id}) }}">{{ id }}</a>
+                                </th>
+                                <td>
+                                    <a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.firstname }} </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.lastname }} </a>
+                                </td>
+                                <td><a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.email }} </a>
+                                </td>
                             </tr>
                             {% set id = id + 1 %}
                         {% endfor %}
