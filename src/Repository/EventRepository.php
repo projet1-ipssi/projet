@@ -56,13 +56,27 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getEventByTitle($title, $now){
+    public function getEventByTitle($title, $now, $page){
+        if ($page == 0){
         $query= $this->createQueryBuilder('e')
             ->andWhere('e.endDate >= :now')
             ->andWhere('e.title LIKE :title')
             ->setParameter('title','%'.$title.'%')
             ->setParameter('now',$now)
-            ->orderBy('e.startDate', 'ASC');
+            ->orderBy('e.startDate', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults(6);
+        }
+        else{
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(6*$page)
+                ->setMaxResults(6);
+        }
 
         return $query->getQuery()
             ->getResult();

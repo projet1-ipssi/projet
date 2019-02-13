@@ -14,3 +14,24 @@
 .hidden{
 display: none;
 }
+
+.block-ellipsis{
+    display: -webkit-box;
+    max-width: 100%;
+    height: 30px;
+    margin: 0 auto;
+    line-height: 1rem;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.icon-star{
+    color: #FFD700;
+}
+
+.icon-star-empty{
+    color: #FFD700;
+}
