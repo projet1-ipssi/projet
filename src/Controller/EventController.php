@@ -25,10 +25,13 @@ class EventController extends AbstractController
                 $vote = true;
             }
         }
+        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
+
         return [
             'html' => $this->renderView('home/event.html.twig', [
                 'event' => $event,
-                'vote'=>$vote
+                'vote'=>$vote,
+                'moyenne'=>$avg
             ])
         ];
     }
@@ -139,9 +142,10 @@ class EventController extends AbstractController
 
         $now = new \DateTime();
         $title = $request->get('title');
+        $page = $request->get('page');
         $results=[];
 
-        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now);
+        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now, $page);
         foreach ($events as $event){
             $comments = $commentsRepository->findOneBy(['event'=>$event]);
             if (!$comments){

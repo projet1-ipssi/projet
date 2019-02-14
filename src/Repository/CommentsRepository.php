@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Comments;
+use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -70,5 +71,17 @@ class CommentsRepository extends ServiceEntityRepository
             ->getQuery()
             ->setMaxResults(10)
             ->getResult();
+    }
+
+    public function getMoyenne(Event $event){
+        $query = $this->createQueryBuilder('c')
+            ->select("avg(c.rating) as average")
+            ->andWhere('c.event = :event')
+            ->groupBy('c.event')
+            ->setParameter('event',$event)
+        ;
+
+        return $query->getQuery()
+            ->getOneOrNullResult();
     }
 }
