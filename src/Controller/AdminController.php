@@ -48,7 +48,7 @@ class AdminController extends AbstractController
             'html' => $this->renderView('home/event.html.twig', [
                 'event' => $event,
                 'vote' => $vote,
-                'moyenne'=>$avg
+                'moyenne' => $avg
             ])
         ];
     }
@@ -165,8 +165,8 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/user/add.html.twig', [
-            'form' => $form->createView(),
             'namepage' => $namepage,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -184,18 +184,56 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('all-users');
     }
 
+    //Display All Events
+
     /**
      * @Route("/admin/events", name="all-event")
      */
-    public function video()
+    public function AllEvent()
     {
         $namepage = 'All Event';
 
         $events = $this->eventsManager->findAll();
+        $nbEvents = (count($events) / 6);
+
+        //Give number page for paging
+        $nb = $this->eventsManager->getNumberPage($nbEvents);
+
+        $page = 0;
+
 
         return $this->render('admin/event/all.html.twig', [
             'namepage' => $namepage,
             'events' => $events,
+            'nb' => $nb,
+            'nbEvents' => $nbEvents,
+            'page' => $page
+        ]);
+    }
+
+
+    //Ajax request All event
+
+    /**
+     * @Route("admin/event/ajax", name="all_event_ajax")
+     */
+    public function AllEventAjax(Request $request)
+    {
+        $now = new \DateTime();
+        $title = $request->get('title');
+        $page = $request->get('page');
+        $results = [];
+
+        $events = $this->eventsManager->getEventByTitle($title, $now, $page);
+
+        foreach ($events as $event) {
+            $results[] = $this->prepareResult($event);
+        }
+
+        return $this->json([
+            'results' => $results,
+            'title' => $title,
+            'page' => $page
         ]);
     }
 
@@ -281,6 +319,8 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin');
     }
 
+    //Display Only Admin Rating Events
+
     /**
      * @Route("/admin/my-rating", name="AdminRating")
      */
@@ -289,8 +329,8 @@ class AdminController extends AbstractController
         $namepage = 'My Rated Event';
 
         $user = $this->getUser();
-        $events = $this->commentsManager->findBy(['user'=>$user]);
-        $nbEvents = (count($events)/6);
+        $events = $this->commentsManager->findBy(['user' => $user]);
+        $nbEvents = (count($events) / 6);
 
 
         //Give number page for paging
@@ -299,12 +339,15 @@ class AdminController extends AbstractController
         $page = 0;
 
         return $this->render('admin/event/my-rating.html.twig', [
-            'events' => $events,
             'namepage' => $namepage,
+            'events' => $events,
             'nb' => $nb,
+            'nbEvents' => $nbEvents,
             'page' => $page
         ]);
     }
+
+    //Ajax request Admin Rating Events
 
     /**
      * @Route("/admin/event_rating/ajax", name="event_ajax_admin_rating")
@@ -332,8 +375,8 @@ class AdminController extends AbstractController
 
         return $this->json([
             'results' => $results,
-            'title'=>$title,
-            'page'=>$page
+            'title' => $title,
+            'page' => $page
         ]);
     }
 }
