@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Repository\CommentsRepository;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +14,19 @@ use App\Entity\Comments;
 
 class HomeController extends AbstractController
 {
+    private $userRepository;
+    private $eventRepository;
+    private $commentsRepository;
+    private $em;
+
+    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, CommentsRepository $commentsRepository, EntityManagerInterface $em)
+    {
+        $this->userRepository = $userRepository;
+        $this->eventRepository = $eventRepository;
+        $this->commentsRepository = $commentsRepository;
+        $this->em = $em;
+    }
+
     /**
      * @Route("/", name="home")
      */
@@ -24,6 +40,7 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'nbEvents'=>$nbEvents,
+            'events'=>$events,
             'page'=>$page
         ]);
     }
@@ -58,7 +75,7 @@ class HomeController extends AbstractController
         $page = $request->get('page');
         $results=[];
 
-        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now, $page);
+        $events = $this->eventRepository->getEventByTitle($title, $now, $page);
 
         foreach ($events as $event){
             $results[] = $this->prepareResult($event);

@@ -73,15 +73,25 @@ class CommentsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getMoyenne(Event $event){
+    public function getMoyenne(Event $event)
+    {
         $query = $this->createQueryBuilder('c')
             ->select("avg(c.rating) as average")
             ->andWhere('c.event = :event')
             ->groupBy('c.event')
-            ->setParameter('event',$event)
-        ;
+            ->setParameter('event', $event);
 
         return $query->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function userLastRate()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->orderBy('c.rating', 'DESC')
+            ->getQuery()
+            ->setMaxResults(5)
+            ->getResult();
     }
 }
