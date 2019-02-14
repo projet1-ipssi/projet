@@ -18,6 +18,8 @@ security:
                 check_path: login
                 username_parameter: "login_user[email]"
                 password_parameter: "login_user[password]"
+                default_target_path: login_success
+                always_use_default_target_path: true
             logout:
                 path: /logout
                 target: /
