@@ -26,15 +26,17 @@ class SecurityController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $user = new User();
+
         $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Registered !');
+            $this->em->persist($user);
+            $this->em->flush();
+
+            $this->addFlash('success', 'You are successfully Registered !');
             $this->redirectToRoute('home');
 
         }
@@ -50,8 +52,10 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils)
     {
         $user = new User();
+
         $form = $this->createForm(LoginUserType::class, $user);
         $error = $authenticationUtils->getLastAuthenticationError();
+
         $this->addFlash('success', 'Login success !');
         $this->redirectToRoute('home');
 
