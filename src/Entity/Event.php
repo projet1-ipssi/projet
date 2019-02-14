@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraint as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -29,16 +30,23 @@ class Event
     private $description;
 
     /**
+     * @Assert\Url(
+     *    message = "The url '{{ value }}' is not a valid url",
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $picture;
 
     /**
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      * @ORM\Column(type="datetime")
      */
     private $startDate;
 
     /**
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      * @ORM\Column(type="datetime")
      */
     private $endDate;
