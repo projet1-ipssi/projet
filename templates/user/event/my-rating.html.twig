@@ -14,18 +14,27 @@
 
 {% block body %}
 
+    <!-- Namber Total Page -->
+    {% if (events|length)%6 == 0 %}
+        {% set nb = ((nbEvents|round(0,'floor'))) %}
+    {% else %}
+        {% set nb = ((nbEvents|round(0,'floor'))+1) %}
+    {% endif %}
+
     <div class="card mb-3 wow fadeIn" style="width: 55%; margin: auto;">
         <div class="card-body">
             <h1 align="center"><strong>{{ namepage }}</strong></h1>
 
             {% include 'search/search.html.twig' %}
-            
+
             <!-- Grid row -->
-            <div class="row home-event-js" data-endpoint="{{ path('event_ajax_user_rating') }}">
+            <div class="row home-event-js" data-endpoint="{{ path('event_ajax_user_rating') }}" data-value="{{ nb }}">
 
 
             </div>
             <!-- Grid row -->
+
+            {% include 'home/paging.html.twig' %}
 
         </div>
     </div>
