@@ -9,7 +9,6 @@ use App\Form\RegisterUserType;
 use App\Manager\CommentsManager;
 use App\Manager\EventsManager;
 use App\Manager\UsersManager;
-use App\Repository\UserRepository;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
