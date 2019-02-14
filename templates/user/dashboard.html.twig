@@ -43,11 +43,11 @@
                         {% for event in events %}
 
                                     <tr>
-                                        <th scope="row">{{ id }}</th>
-                                        <td> {{ event.title }} </td>
-                                        <td> {{ event.startDate|date }}</td>
-                                        <td> {{ event.endDate|date }} </td>
-                                        <td> {{ event.rating }} </td>
+                                        <th scope="row"><a href="{{ path('event_profile', {'id': event.id}) }}"> {{ id }} </a></th>
+                                        <td> <a href="{{ path('event_profile', {'id': event.id}) }}"> {{ event.title }} </a></td>
+                                        <td> <a href="{{ path('event_profile', {'id': event.id}) }}"> {{ event.startDate|date }} </a></td>
+                                        <td> <a href="{{ path('event_profile', {'id': event.id}) }}"> {{ event.endDate|date }} </a></td>
+                                        <td> <a href="{{ path('event_profile', {'id': event.id}) }}"> {{ event.rating }} </a></td>
                                     </tr>
                                     {% set id = id + 1 %}
 

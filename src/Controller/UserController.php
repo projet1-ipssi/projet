@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Comments;
 use App\Entity\Event;
 use App\Form\RegisterUserType;
 use App\Manager\CommentsManager;
-use App\Manager\EventManager;
-use App\Repository\CommentsRepository;
-use App\Repository\EventRepository;
+use App\Manager\EventsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +14,16 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    private $eventManager;
+    private $eventsManager;
     private $commentsManager;
 
-    public function __construct(EventManager $eventManager, CommentsManager $commentsManager)
+    public function __construct(EventsManager $eventsManager, CommentsManager $commentsManager)
     {
-        $this->eventManager = $eventManager;
+        $this->eventsManager = $eventsManager;
         $this->commentsManager = $commentsManager;
     }
 
+    //Return Event template for User Noted Page
     protected function prepareResult(Event $event)
     {
         $vote = false;
@@ -36,7 +34,7 @@ class UserController extends AbstractController
                 $vote = true;
             }
         }
-        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
+        $avg = $this->commentsManager->getAverage($event);
 
         return [
             'html' => $this->renderView('home/event.html.twig', [
@@ -97,7 +95,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/my-rating", name="UserRating")
      */
-    public function EventWithRating()
+    public function UserRatingPage()
     {
         $namepage = 'My Rated Event';
 
@@ -107,7 +105,7 @@ class UserController extends AbstractController
 
 
         //Give number page for paging
-        $nb = $this->eventManager->getNumberPage($nbEvents);
+        $nb = $this->eventsManager->getNumberPage($nbEvents);
 
         $page = 0;
 
@@ -122,19 +120,18 @@ class UserController extends AbstractController
     /**
      * @Route("/user/event_rating/ajax", name="event_ajax_user_rating")
      */
-    public function EventAjax(Request $request, CommentsRepository $commentsRepository, EventRepository $eventRepository)
+    public function EventAjax(Request $request)
     {
         $now = new \DateTime();
         $results = [];
         $title = $request->get('title');
         $page = $request->get('page');
         $user = $this->getUser();
-        $ids = $commentsRepository->getUserEventRating($user);
-
-        $events = $eventRepository->getEventUserByTitle($title, $now, $page, $ids);
-
+        $ids = $this->commentsManager->getUserEventRating($user);
+        $events = $this->eventsManager->getEventUserByTitle($title, $now, $page, $ids);
 
         $user = $this->getUser();
+
         if ($user) {
             foreach ($events as $event) {
                 $comments = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
