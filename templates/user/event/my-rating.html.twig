@@ -14,13 +14,6 @@
 
 {% block body %}
 
-    <!-- Namber Total Page -->
-    {% if (events|length)%6 == 0 %}
-        {% set nb = ((nbEvents|round(0,'floor'))) %}
-    {% else %}
-        {% set nb = ((nbEvents|round(0,'floor'))+1) %}
-    {% endif %}
-
     <div class="card mb-3 wow fadeIn" style="width: 55%; margin: auto;">
         <div class="card-body">
             <h1 align="center"><strong>{{ namepage }}</strong></h1>

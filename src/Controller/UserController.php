@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Comments;
 use App\Entity\Event;
 use App\Form\RegisterUserType;
-use App\Repository\CommentsRepository;
-use App\Repository\EventRepository;
-use App\Repository\UserRepository;
+use App\Manager\CommentsManager;
+use App\Manager\EventManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,17 +14,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    private $userRepository;
-    private $eventRepository;
-    private $commentsRepository;
-    private $em;
+    private $eventManager;
+    private $commentsManager;
 
-    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, CommentsRepository $commentsRepository, EntityManagerInterface $em)
+    public function __construct(EventManager $eventManager, CommentsManager $commentsManager)
     {
-        $this->userRepository = $userRepository;
-        $this->eventRepository = $eventRepository;
-        $this->commentsRepository = $commentsRepository;
-        $this->em = $em;
+        $this->eventManager = $eventManager;
+        $this->commentsManager = $commentsManager;
     }
 
     protected function prepareResult(Event $event)
@@ -34,7 +28,7 @@ class UserController extends AbstractController
         $vote = false;
         $user = $this->getUser();
         if ($user) {
-            $comment = $this->getDoctrine()->getRepository(Comments::class)->findOneBy(['user' => $user, 'event' => $event]);
+            $comment = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
             if ($comment) {
                 $vote = true;
             }
@@ -54,8 +48,8 @@ class UserController extends AbstractController
     {
         $namepage = 'Dashboard';
         $user = $this->getUser();
-        $events = $this->eventRepository->findAll();
-        $comments = $this->commentsRepository->userLastRate();
+        $events = $this->eventManager->findAll();
+        $comments = $this->commentsManager->userLastRateEvent();
 
         return $this->render('user/dashboard.html.twig', [
             'namepage' => $namepage,
@@ -102,15 +96,20 @@ class UserController extends AbstractController
     public function EventWithRating()
     {
         $namepage = 'My Rated Event';
+
         $user = $this->getUser();
-        $events = $this->commentsRepository->findBy(['user'=>$user]);
+        $events = $this->commentsManager->findBy(['user'=>$user]);
         $nbEvents = (count($events)/6);
+
+        //Give number page for paging
+        $nb = $this->eventManager->getNumberPage($nbEvents);
+
         $page = 0;
 
         return $this->render('user/event/my-rating.html.twig', [
             'events' => $events,
             'namepage' => $namepage,
-            'nbEvents' => $nbEvents,
+            'nb' => $nb,
             'page' => $page
         ]);
     }
@@ -124,12 +123,12 @@ class UserController extends AbstractController
         $results = [];
         $title = $request->get('title');
         $page = $request->get('page');
-        $events = $this->eventRepository->getEventByTitle($title, $now, $page);
+        $events = $this->eventManager->getEventByTitle($title, $now, $page);
 
         $user = $this->getUser();
         if ($user) {
             foreach ($events as $event) {
-                $comments = $this->commentsRepository->findOneBy(['user' => $user, 'event' => $event]);
+                $comments = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
                 if ($comments) {
                     $results[] = $this->prepareResult($event);
                 }
