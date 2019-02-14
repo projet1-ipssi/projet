@@ -68,3 +68,6 @@ Le projet consiste à faire voter en ligne des conférences par les utilisateurs
 - Créer un utilisateur
 - Voir les conférences qu'il a noté
 - Modifier ses données
+
+##### Images générée par les fixtures
+Les images générées par les fixtures sont de lien dynamique.À chaque rechargement de page l'image change.
