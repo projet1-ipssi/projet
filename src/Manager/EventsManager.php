@@ -16,7 +16,8 @@ class EventsManager
     }
 
     //All event
-    public function findAll(){
+    public function findAll()
+    {
         return $this->eventsRepository->findAll();
     }
 
@@ -26,12 +27,14 @@ class EventsManager
     }
 
     //Give event
-    public function getEventByTitle($title, $now, $page) {
+    public function getEventByTitle($title, $now, $page)
+    {
         return $this->eventsRepository->getEventByTitle($title, $now, $page);
     }
 
     //Get All User Events, 6 events by page
-    public function getEventUserByTitle($title, $now, $page, $ids){
+    public function getEventUserByTitle($title, $now, $page, $ids)
+    {
         return $this->eventsRepository->getEventUserByTitle($title, $now, $page, $ids);
     }
 
@@ -41,4 +44,21 @@ class EventsManager
         return round($nbEvents);
     }
 
+    //Get List of Events no noted
+    public function getEventNoRating($ids, $now)
+    {
+        return $this->eventsRepository->getEventNoRating($ids, $now);
+    }
+
+    //List of noted Events
+    public function getEventRatingByTitle($title, $now, $page, $ids)
+    {
+        return $this->eventsRepository->getEventRatingByTitle($title, $now, $page, $ids);
+    }
+
+    //List of no noted Events
+    public function getEventWithoutRatingByTitle($title, $now, $page, $ids)
+    {
+        return $this->eventsRepository->getEventWithoutRatingByTitle($title, $now, $page, $ids);
+    }
 }

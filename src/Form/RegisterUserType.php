@@ -19,18 +19,17 @@ class RegisterUserType extends AbstractType
         $builder
             ->add('firstname')
             ->add('lastname')
-            ->add('birthdate', DateType::class,[
+            ->add('birthdate', DateType::class, [
                 'widget' => 'single_text',
                 //'html5' => false,
             ])
             ->add('email', EmailType::class)
-            ->add('password', RepeatedType::class,array(
+            ->add('password', RepeatedType::class, array(
                 'type' => PasswordType:: class,
                 'first_options' => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ))
-            ->add('submit', SubmitType::class)
-        ;
+            ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

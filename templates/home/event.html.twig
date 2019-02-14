@@ -8,7 +8,7 @@
         <div class="view overlay rounded z-depth-2 mb-4">
             <img class="img-fluid" src="{% if event.picture != null %}{{ event.picture }} {% endif %}"
                  alt="Sample image">
-            <a>
+            <a href="{{ path('event_profile', {'id':event.id}) }}">
                 <div class="mask rgba-white-slight"></div>
             </a>
         </div>
@@ -30,6 +30,7 @@
         <p class="dark-grey-text block-ellipsis">{{ event.description|raw }}</p>
         <!-- Read more button -->
         {% if vote == false %}
+            <br>
             <div class="row">
                 <div class="mx-auto">
                     <a class="btn btn-primary btn-rounded btn-md" href="{{ path('event_profile', {'id':event.id}) }}"

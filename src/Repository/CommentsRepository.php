@@ -54,14 +54,13 @@ class CommentsRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('c')
             ->select("e.id, e.title, e.startDate, e.endDate, avg(c.rating) as average")
-            ->innerJoin('c.event','e')
+            ->innerJoin('c.event', 'e')
             ->groupBy('c.event')
             ->orderBy('average', 'desc')
-            ->setMaxResults(10)
-        ;
+            ->setMaxResults(10);
 
-       return $query->getQuery()
-        ->getResult();
+        return $query->getQuery()
+            ->getResult();
     }
 
     public function topEvent()
@@ -74,7 +73,7 @@ class CommentsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getMoyenne(Event $event)
+    public function getAverage(Event $event)
     {
         $query = $this->createQueryBuilder('c')
             ->select("avg(c.rating) as average")
@@ -90,32 +89,34 @@ class CommentsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->select('e.id, e.title, e.description, e.startDate, e.endDate, c.rating')
-            ->join('c.event','e')
+            ->join('c.event', 'e')
             ->andWhere('c.user = :user')
             ->orderBy('c.rating', 'DESC')
-            ->setParameter('user',$user)
+            ->setParameter('user', $user)
             ->getQuery()
             ->setMaxResults(5)
             ->getResult();
     }
 
 
-    public function getEventRating(){
-        $query= $this->createQueryBuilder('c')
+    public function getEventRating()
+    {
+        $query = $this->createQueryBuilder('c')
             ->select("e.id")
-            ->join('c.event','e')
+            ->join('c.event', 'e')
             ->groupBy('c.event');
 
         return $query->getQuery()
             ->getResult();
     }
 
-    public function getUserEventRating($user){
-        $query= $this->createQueryBuilder('c')
+    public function getUserEventRating($user)
+    {
+        $query = $this->createQueryBuilder('c')
             ->select("e.id")
-            ->join('c.event','e')
+            ->join('c.event', 'e')
             ->andWhere('c.user = :user')
-            ->setParameter('user',$user)
+            ->setParameter('user', $user)
             ->groupBy('c.event');
 
         return $query->getQuery()

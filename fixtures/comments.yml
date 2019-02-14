@@ -31,14 +31,6 @@ App\Entity\Comments:
     user: '@user_1'
     event: '@event_8'
     rating: <numberBetween(1,5)>
-  comments_9:
-    user: '@user_1'
-    event: '@event_9'
-    rating: <numberBetween(1,5)>
-  comments_10:
-    user: '@user_1'
-    event: '@event_10'
-    rating: <numberBetween(1,5)>
   comments_11:
     user: '@user_2'
     event: '@event_1'
