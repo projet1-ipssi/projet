@@ -24,6 +24,10 @@
                        class="list-group-item list-group-item-action waves-effect">
                         <i class="fas fa-user mr-3"></i>My Account</a>
                 {% endblock %}
+                {% block event %}
+                    <a href="{{ path('AdminRating') }}" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fa fa-star mr-3"></i>My Rate Event</a>
+                {% endblock %}
                 {% block users %}
                     <a href="{{ path('all-users') }}"
                        class="list-group-item list-group-item-action waves-effect">

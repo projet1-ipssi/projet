@@ -92,6 +92,7 @@ class EventController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success', 'Your are successfully Voted !');
         return $this->redirectToRoute('event_profile', ['id'=>$id]);
     }
 

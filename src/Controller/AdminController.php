@@ -6,8 +6,9 @@ use App\Entity\Event;
 use App\Entity\User;
 use App\Form\AddEventType;
 use App\Form\RegisterUserType;
-use App\Repository\CommentsRepository;
-use App\Repository\EventRepository;
+use App\Manager\CommentsManager;
+use App\Manager\EventsManager;
+use App\Manager\UsersManager;
 use App\Repository\UserRepository;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,17 +19,39 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends AbstractController
 {
-    private $userRepository;
-    private $eventRepository;
-    private $commentsRepository;
+    private $usersManager;
+    private $eventsManager;
+    private $commentsManager;
     private $em;
 
-    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, CommentsRepository $commentsRepository, EntityManagerInterface $em)
+    public function __construct(UsersManager $usersManager, EventsManager $eventsManager, CommentsManager $commentsManager, EntityManagerInterface $em)
     {
-        $this->userRepository = $userRepository;
-        $this->eventRepository = $eventRepository;
-        $this->commentsRepository = $commentsRepository;
+        $this->usersManager = $usersManager;
+        $this->eventsManager = $eventsManager;
+        $this->commentsManager = $commentsManager;
         $this->em = $em;
+    }
+
+    //Return Event template for Admin Noted Page
+    protected function prepareResult(Event $event)
+    {
+        $vote = false;
+        $user = $this->getUser();
+        if ($user) {
+            $comment = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
+            if ($comment) {
+                $vote = true;
+            }
+        }
+        $avg = $this->commentsManager->getAverage($event);
+
+        return [
+            'html' => $this->renderView('home/event.html.twig', [
+                'event' => $event,
+                'vote' => $vote,
+                'moyenne'=>$avg
+            ])
+        ];
     }
 
     /**
@@ -36,12 +59,13 @@ class AdminController extends AbstractController
      */
     public function index()
     {
+        //Name Page
         $namepage = 'Dashboard';
 
-        $lastUsers = $this->userRepository->findLastUsers();
-        $users = $this->userRepository->findAll();
-        $events = $this->eventRepository->findAll();
-        $comments = $this->commentsRepository->getTopTen();
+        $lastUsers = $this->usersManager->findLastUsers();
+        $users = $this->usersManager->findAll();
+        $events = $this->eventsManager->findAll();
+        $comments = $this->commentsManager->getTopTen();
 
         return $this->render('admin/dashboard.html.twig', [
             'namepage' => $namepage,
@@ -55,20 +79,24 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/profile", name="admin-profile")
      */
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function profile(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $namepage = 'My account';
+
         $user = $this->getUser();
+
         $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->em->persist($user);
+            $this->em->flush();
             $this->addFlash('success', 'Your profile update successfully !');
             return $this->redirectToRoute('admin');
         }
+
         return $this->render('admin/profile/profile.html.twig', [
             'form' => $form->createView(),
             'namepage' => $namepage,
@@ -78,10 +106,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/users", name="all-users")
      */
-    public function users(UserRepository $userRepository)
+    public function users()
     {
         $namepage = 'All Users';
-        $users = $userRepository->findAll();
+
+        $users = $this->usersManager->findAll();
+
         return $this->render('admin/user/all.html.twig', [
             'users' => $users,
             'namepage' => $namepage,
@@ -94,7 +124,9 @@ class AdminController extends AbstractController
     public function updateUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $namepage = 'Update User';
+
         $user = $this->getUser();
+
         $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
 
@@ -117,9 +149,11 @@ class AdminController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $user = new User();
-        $form = $this->createForm(RegisterUserType::class, $user);
         $namepage = 'Add User';
+
+        $user = new User();
+
+        $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -142,9 +176,11 @@ class AdminController extends AbstractController
      */
     public function removeUser($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->usersManager->find($id);
+
         $this->em->remove($user);
         $this->em->flush();
+
         $this->addFlash('success', 'You are successfully remove user!');
         return $this->redirectToRoute('all-users');
     }
@@ -155,11 +191,12 @@ class AdminController extends AbstractController
     public function video()
     {
         $namepage = 'All Event';
-        $events = $this->eventRepository->findAll();
+
+        $events = $this->eventsManager->findAll();
 
         return $this->render('admin/event/all.html.twig', [
-            'events' => $events,
             'namepage' => $namepage,
+            'events' => $events,
         ]);
     }
 
@@ -167,13 +204,15 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/event/add", name="add-event")
      */
-    public function addEvent(Request $request, MailerService $mailerService, UserRepository $userRepository)
+    public function addEvent(Request $request, MailerService $mailerService)
     {
+        $namepage = 'Add Event';
+
+        $now = new \DateTime();
         $event = new Event();
+
         $form = $this->createForm(AddEventType::class, $event);
         $form->handleRequest($request);
-        $namepage = 'Add Event';
-        $now = new \DateTime();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -181,16 +220,16 @@ class AdminController extends AbstractController
                 $this->addFlash('danger', 'The end date of the event must be different from the start date !');
             } elseif ($event->getStartDate() > $event->getEndDate()) {
                 $this->addFlash('danger', 'The event end date must be upper than the start date.!');
-            }elseif ($event->getStartDate() <= $now) {
+            } elseif ($event->getStartDate() <= $now) {
                 $this->addFlash('danger', 'The event start date must be upper than now.!');
-            }
-            else {
+            } else {
                 $this->em->persist($event);
                 $this->em->flush();
-                $users= $userRepository->findAll();
-                foreach ($users as $user){
-                    $mailerService->sendMail($user,$event);
+                $users = $this->usersManager->findAll();
+                foreach ($users as $user) {
+                    $mailerService->sendMail($user, $event);
                 }
+
                 $this->addFlash('success', 'Event added successfully !');
                 return $this->redirectToRoute('admin');
             }
@@ -198,8 +237,8 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/event/add.html.twig', [
-            'form' => $form->createView(),
             'namepage' => $namepage,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -209,7 +248,7 @@ class AdminController extends AbstractController
     public function adminUpdateVideo(Request $request, $id)
     {
         $namepage = 'Update Event';
-        $event = $this->eventRepository->find($id);
+        $event = $this->eventsManager->find($id);
 
         $form = $this->createForm(AddEventType::class, $event);
         $form->handleRequest($request);
@@ -218,6 +257,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($event);
             $this->em->flush();
+
             $this->addFlash('success', 'You are successfully update Event !');
             return $this->redirectToRoute('admin');
         }
@@ -233,7 +273,7 @@ class AdminController extends AbstractController
      */
     public function removeVideo($id)
     {
-        $event = $this->eventRepository->find($id);
+        $event = $this->eventsManager->find($id);
 
         $this->em->remove($event);
         $this->em->flush();
@@ -245,12 +285,25 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/my-rating", name="AdminRating")
      */
-    public function EventWithRating()
+    public function AdminRatingPage()
     {
         $namepage = 'My Rated Event';
 
+        $user = $this->getUser();
+        $events = $this->commentsManager->findBy(['user'=>$user]);
+        $nbEvents = (count($events)/6);
+
+
+        //Give number page for paging
+        $nb = $this->eventsManager->getNumberPage($nbEvents);
+
+        $page = 0;
+
         return $this->render('admin/event/my-rating.html.twig', [
+            'events' => $events,
             'namepage' => $namepage,
+            'nb' => $nb,
+            'page' => $page
         ]);
     }
 
@@ -262,12 +315,16 @@ class AdminController extends AbstractController
         $now = new \DateTime();
         $results = [];
         $title = $request->get('title');
-        $events = $this->eventRepository->getEventByTitle($title, $now);
+        $page = $request->get('page');
+        $user = $this->getUser();
+        $ids = $this->commentsManager->getUserEventRating($user);
+        $events = $this->eventsManager->getEventUserByTitle($title, $now, $page, $ids);
 
         $user = $this->getUser();
+
         if ($user) {
             foreach ($events as $event) {
-                $comments = $this->commentsRepository->findOneBy(['user' => $user, 'event' => $event]);
+                $comments = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
                 if ($comments) {
                     $results[] = $this->prepareResult($event);
                 }
@@ -277,6 +334,7 @@ class AdminController extends AbstractController
         return $this->json([
             'results' => $results,
             'title'=>$title,
+            'page'=>$page
         ]);
     }
 }

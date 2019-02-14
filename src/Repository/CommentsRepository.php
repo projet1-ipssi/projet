@@ -89,7 +89,7 @@ class CommentsRepository extends ServiceEntityRepository
     public function userLastRate(User $user)
     {
         return $this->createQueryBuilder('c')
-            ->select('e.title, e.description, e.startDate, e.endDate, c.rating')
+            ->select('e.id, e.title, e.description, e.startDate, e.endDate, c.rating')
             ->join('c.event','e')
             ->andWhere('c.user = :user')
             ->orderBy('c.rating', 'DESC')
