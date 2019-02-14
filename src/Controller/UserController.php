@@ -102,9 +102,16 @@ class UserController extends AbstractController
     public function EventWithRating()
     {
         $namepage = 'My Rated Event';
+        $user = $this->getUser();
+        $events = $this->commentsRepository->findBy(['user'=>$user]);
+        $nbEvents = (count($events)/6);
+        $page = 0;
 
         return $this->render('user/event/my-rating.html.twig', [
+            'events' => $events,
             'namepage' => $namepage,
+            'nbEvents' => $nbEvents,
+            'page' => $page
         ]);
     }
 
@@ -116,7 +123,8 @@ class UserController extends AbstractController
         $now = new \DateTime();
         $results = [];
         $title = $request->get('title');
-        $events = $this->eventRepository->getEventByTitle($title, $now);
+        $page = $request->get('page');
+        $events = $this->eventRepository->getEventByTitle($title, $now, $page);
 
         $user = $this->getUser();
         if ($user) {
@@ -131,6 +139,7 @@ class UserController extends AbstractController
         return $this->json([
             'results' => $results,
             'title'=>$title,
+            'page'=>$page
         ]);
     }
 }

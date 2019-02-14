@@ -241,4 +241,42 @@ class AdminController extends AbstractController
         $this->addFlash('success', 'You are successfully remove Event!');
         return $this->redirectToRoute('admin');
     }
+
+    /**
+     * @Route("/admin/my-rating", name="AdminRating")
+     */
+    public function EventWithRating()
+    {
+        $namepage = 'My Rated Event';
+
+        return $this->render('admin/event/my-rating.html.twig', [
+            'namepage' => $namepage,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/event_rating/ajax", name="event_ajax_admin_rating")
+     */
+    public function EventAjax(Request $request)
+    {
+        $now = new \DateTime();
+        $results = [];
+        $title = $request->get('title');
+        $events = $this->eventRepository->getEventByTitle($title, $now);
+
+        $user = $this->getUser();
+        if ($user) {
+            foreach ($events as $event) {
+                $comments = $this->commentsRepository->findOneBy(['user' => $user, 'event' => $event]);
+                if ($comments) {
+                    $results[] = $this->prepareResult($event);
+                }
+            }
+        }
+
+        return $this->json([
+            'results' => $results,
+            'title'=>$title,
+        ]);
+    }
 }
