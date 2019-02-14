@@ -39,10 +39,13 @@ class UserController extends AbstractController
                 $vote = true;
             }
         }
+        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
+
         return [
             'html' => $this->renderView('home/event.html.twig', [
                 'event' => $event,
-                'vote' => $vote
+                'vote' => $vote,
+                'moyenne'=>$avg
             ])
         ];
     }
@@ -54,14 +57,12 @@ class UserController extends AbstractController
     {
         $namepage = 'Dashboard';
         $user = $this->getUser();
-        $events = $this->eventRepository->findAll();
-        $comments = $this->commentsRepository->userLastRate();
+        $events = $this->commentsRepository->userLastRate($user);
 
         return $this->render('user/dashboard.html.twig', [
             'namepage' => $namepage,
             'user' => $user,
             'events' => $events,
-            'comments' => $comments,
         ]);
     }
 
@@ -124,7 +125,10 @@ class UserController extends AbstractController
         $results = [];
         $title = $request->get('title');
         $page = $request->get('page');
-        $events = $this->eventRepository->getEventByTitle($title, $now, $page);
+        $user = $this->getUser();
+        $ids = $this->commentsRepository->getUserEventRating($user);
+
+        $events = $this->eventRepository->getEventUserByTitle($title, $now, $page, $ids);
 
         $user = $this->getUser();
         if ($user) {

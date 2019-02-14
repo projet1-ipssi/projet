@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Comments;
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -85,13 +86,40 @@ class CommentsRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function userLastRate()
+    public function userLastRate(User $user)
     {
         return $this->createQueryBuilder('c')
-            ->select('c')
+            ->select('e.title, e.description, e.startDate, e.endDate, c.rating')
+            ->join('c.event','e')
+            ->andWhere('c.user = :user')
             ->orderBy('c.rating', 'DESC')
+            ->setParameter('user',$user)
             ->getQuery()
             ->setMaxResults(5)
             ->getResult();
     }
+
+
+    public function getEventRating(){
+        $query= $this->createQueryBuilder('c')
+            ->select("e.id")
+            ->join('c.event','e')
+            ->groupBy('c.event');
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function getUserEventRating($user){
+        $query= $this->createQueryBuilder('c')
+            ->select("e.id")
+            ->join('c.event','e')
+            ->andWhere('c.user = :user')
+            ->setParameter('user',$user)
+            ->groupBy('c.event');
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
 }

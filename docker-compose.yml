@@ -17,10 +17,11 @@ services:
       PHP_DISPLAY_ERRORS: 1
 
   database:
-    image: mysql:5.6
+    image: mysql:8.0
+    command: mysqld --sql_mode=""
     volumes:
-      - ./docker/mysqlconf:/tmp/conf.d
-      - ./docker/mysql:/tmp/mysql
+      - ./docker/mysqlconf:/etc/mysql/conf.d
+      - ./docker/mysql:/var/lib/mysql
     environment:
       MYSQL_DATABASE: projet1
       MYSQL_ROOT_PASSWORD: root

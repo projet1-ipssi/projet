@@ -1,0 +1,161 @@
+App\Entity\Comments:
+  comments_1:
+    user: '@user_1'
+    event: '@event_1'
+    rating: <numberBetween(1,5)>
+  comments_2:
+    user: '@user_1'
+    event: '@event_2'
+    rating: <numberBetween(1,5)>
+  comments_3:
+    user: '@user_1'
+    event: '@event_3'
+    rating: <numberBetween(1,5)>
+  comments_4:
+    user: '@user_1'
+    event: '@event_4'
+    rating: <numberBetween(1,5)>
+  comments_5:
+    user: '@user_1'
+    event: '@event_5'
+    rating: <numberBetween(1,5)>
+  comments_6:
+    user: '@user_1'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_7:
+    user: '@user_1'
+    event: '@event_7'
+    rating: <numberBetween(1,5)>
+  comments_8:
+    user: '@user_1'
+    event: '@event_8'
+    rating: <numberBetween(1,5)>
+  comments_9:
+    user: '@user_1'
+    event: '@event_9'
+    rating: <numberBetween(1,5)>
+  comments_10:
+    user: '@user_1'
+    event: '@event_10'
+    rating: <numberBetween(1,5)>
+  comments_11:
+    user: '@user_2'
+    event: '@event_1'
+    rating: <numberBetween(1,5)>
+  comments_12:
+    user: '@user_2'
+    event: '@event_2'
+    rating: <numberBetween(1,5)>
+  comments_13:
+    user: '@user_2'
+    event: '@event_3'
+    rating: <numberBetween(1,5)>
+  comments_14:
+    user: '@user_2'
+    event: '@event_4'
+    rating: <numberBetween(1,5)>
+  comments_15:
+    user: '@user_2'
+    event: '@event_5'
+    rating: <numberBetween(1,5)>
+  comments_16:
+    user: '@user_2'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_17:
+    user: '@user_2'
+    event: '@event_7'
+    rating: <numberBetween(1,5)>
+  comments_18:
+    user: '@user_2'
+    event: '@event_8'
+    rating: <numberBetween(1,5)>
+  comments_19:
+    user: '@user_2'
+    event: '@event_9'
+    rating: <numberBetween(1,5)>
+  comments_20:
+    user: '@user_2'
+    event: '@event_10'
+    rating: <numberBetween(1,5)>
+  comments_31:
+    user: '@user_3'
+    event: '@event_1'
+    rating: <numberBetween(1,5)>
+  comments_32:
+    user: '@user_3'
+    event: '@event_2'
+    rating: <numberBetween(1,5)>
+  comments_33:
+    user: '@user_3'
+    event: '@event_3'
+    rating: <numberBetween(1,5)>
+  comments_34:
+    user: '@user_3'
+    event: '@event_4'
+    rating: <numberBetween(1,5)>
+  comments_35:
+    user: '@user_3'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_36:
+    user: '@user_3'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_37:
+    user: '@user_3'
+    event: '@event_7'
+    rating: <numberBetween(1,5)>
+  comments_38:
+    user: '@user_3'
+    event: '@event_8'
+    rating: <numberBetween(1,5)>
+  comments_39:
+    user: '@user_3'
+    event: '@event_9'
+    rating: <numberBetween(1,5)>
+  comments_40:
+    user: '@user_3'
+    event: '@event_10'
+    rating: <numberBetween(1,5)>
+  comments_41:
+    user: '@user_4'
+    event: '@event_1'
+    rating: <numberBetween(1,5)>
+  comments_42:
+    user: '@user_4'
+    event: '@event_2'
+    rating: <numberBetween(1,5)>
+  comments_43:
+    user: '@user_4'
+    event: '@event_3'
+    rating: <numberBetween(1,5)>
+  comments_44:
+    user: '@user_4'
+    event: '@event_4'
+    rating: <numberBetween(1,5)>
+  comments_45:
+    user: '@user_4'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_46:
+    user: '@user_4'
+    event: '@event_6'
+    rating: <numberBetween(1,5)>
+  comments_47:
+    user: '@user_4'
+    event: '@event_7'
+    rating: <numberBetween(1,5)>
+  comments_48:
+    user: '@user_4'
+    event: '@event_8'
+    rating: <numberBetween(1,5)>
+  comments_49:
+    user: '@user_4'
+    event: '@event_9'
+    rating: <numberBetween(1,5)>
+  comments_50:
+    user: '@user_4'
+    event: '@event_10'
+    rating: <numberBetween(1,5)>

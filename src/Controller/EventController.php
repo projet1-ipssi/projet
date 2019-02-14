@@ -56,11 +56,14 @@ class EventController extends AbstractController
         else{
             $rating = 0;
         }
+        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
+
         return $this->render('event/index.html.twig', [
             'controller_name' => 'EventController',
             'event'=>$event,
             'comment'=>$comments,
-            'rating'=>$rating
+            'rating'=>$rating,
+            'moyenne'=>$avg
         ]);
     }
 
@@ -95,20 +98,37 @@ class EventController extends AbstractController
     /**
      * @Route("/event-rating", name="eventRating")
      */
-    public function EventWithRating(CommentsRepository $commentsRepository)
+    public function EventWithRating(CommentsRepository $commentsRepository, EventRepository $eventRepository)
     {
+        $now = new \DateTime();
+        $events = $commentsRepository->getEventRating();
+        $nbEvents = (count($events)/6);
+        $page = 0;
+
         return $this->render('event/event_rating.html.twig', [
             'controller_name' => 'HomeController',
+            'nbEvents'=>$nbEvents,
+            'events'=>$events,
+            'page'=>$page
         ]);
     }
 
     /**
      * @Route("/event-without-rating", name="eventWithoutRating")
      */
-    public function EventWithoutRating(CommentsRepository $commentsRepository)
+    public function EventWithoutRating(CommentsRepository $commentsRepository, EventRepository $eventRepository)
     {
+        $now = new \DateTime();
+        $ids = $commentsRepository->getEventRating();
+        $events = $eventRepository->getEventNoRating($ids,$now);
+        $nbEvents = (count($events)/6);
+        $page = 0;
+
         return $this->render('event/event_without_rating.html.twig', [
             'controller_name' => 'HomeController',
+            'nbEvents'=>$nbEvents,
+            'events'=>$events,
+            'page'=>$page
         ]);
     }
 
@@ -119,14 +139,14 @@ class EventController extends AbstractController
 
         $now = new \DateTime();
         $title = $request->get('title');
+        $page = $request->get('page');
         $results=[];
 
-        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now);
+        $ids = $commentsRepository->getEventRating();
+
+        $events = $this->getDoctrine()->getRepository(Event::class)->getEventRatingByTitle($title, $now, $page, $ids);
         foreach ($events as $event){
-                $comments = $commentsRepository->findOneBy(['event'=>$event]);
-                if ($comments){
                     $results[] = $this->prepareResult($event);
-                }
         }
 
         return $this->json([
@@ -145,12 +165,11 @@ class EventController extends AbstractController
         $page = $request->get('page');
         $results=[];
 
-        $events = $this->getDoctrine()->getRepository(Event::class)->getEventByTitle($title, $now, $page);
+        $ids = $commentsRepository->getEventRating();
+
+        $events = $this->getDoctrine()->getRepository(Event::class)->getEventWithoutRatingByTitle($title, $now, $page, $ids);
         foreach ($events as $event){
-            $comments = $commentsRepository->findOneBy(['event'=>$event]);
-            if (!$comments){
-                $results[] = $this->prepareResult($event);
-            }
+            $results[] = $this->prepareResult($event);
         }
 
         return $this->json([

@@ -40,21 +40,17 @@
                     <tbody>
                     <tbody>
                     {% set id = 1 %}
-                    {% for comment in comments %}
                         {% for event in events %}
-                            {% if (comment.event.id == event.id) %}
-                                {% if (user.id == comment.user.id) %}
+
                                     <tr>
                                         <th scope="row">{{ id }}</th>
                                         <td> {{ event.title }} </td>
                                         <td> {{ event.startDate|date }}</td>
                                         <td> {{ event.endDate|date }} </td>
-                                        <td> {{ comment.rating }} </td>
+                                        <td> {{ event.rating }} </td>
                                     </tr>
                                     {% set id = id + 1 %}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
+
                     {% endfor %}
                     </tbody>
                     </tbody>

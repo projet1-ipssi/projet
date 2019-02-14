@@ -81,4 +81,107 @@ class EventRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function getEventRatingByTitle($title, $now, $page, $ids){
+        if ($page == 0){
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.id IN (:ids)')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(0)
+                ->setMaxResults(6);
+        }
+        else{
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.id IN (:ids)')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(6*$page)
+                ->setMaxResults(6);
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function getEventWithoutRatingByTitle($title, $now, $page, $ids){
+        if ($page == 0){
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.id NOT IN (:ids)')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(0)
+                ->setMaxResults(6);
+        }
+        else{
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.id NOT IN (:ids)')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(6*$page)
+                ->setMaxResults(6);
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function getEventNoRating($ids, $now){
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.id NOT IN (:ids)')
+            ->andWhere('e.endDate >= :now')
+            ->setParameter('now',$now)
+            ->setParameter('ids',$ids)
+            ->orderBy('e.startDate', 'ASC');
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function getEventUserByTitle($title, $now, $page, $ids){
+
+        if ($page == 0){
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.id IN (:ids)')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(0)
+                ->setMaxResults(6);
+        }
+        else{
+            $query= $this->createQueryBuilder('e')
+                ->andWhere('e.endDate >= :now')
+                ->andWhere('e.id IN (:ids)')
+                ->andWhere('e.title LIKE :title')
+                ->setParameter('title','%'.$title.'%')
+                ->setParameter('now',$now)
+                ->setParameter('ids',$ids)
+                ->orderBy('e.startDate', 'ASC')
+                ->setFirstResult(6*$page)
+                ->setMaxResults(6);
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
 }
