@@ -1,4 +1,5 @@
 
+// Remove or add class to display the star empty or not
 function setRatingStars(item_part, score)
 {
     for (var i = 1; i <= 5; ++i)
