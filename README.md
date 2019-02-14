@@ -37,7 +37,7 @@ Technologies utilisées :
 
 Le projet consiste à faire voter en ligne des conférences par les utilisateurs possédant un compte sur la plateforme.
 
-#####Un visiteur peut : 
+##### Un visiteur peut : 
 
 - Accéder à la home et voir toutes les conférences en ligne
 - Voir toutes les conférences notées et celles non notées
