@@ -15,6 +15,15 @@ MAILER_URL=smtp://mailhog:1025
 - Générer les fixtures : `php bin/console hautelook:fixtures:load`
 
 
+## Commande
+Créer un Admin en ligne de commande (2 arguments requis: email et mot de passe) : 
+
+- Accéder au container nginx : `docker-compose exec web /bin/bash`
+```bash
+php bin/console app:create-admin email@email.fr motDePasse
+```
+
+
 ## Run 
 
 Pour accéder au projet : 

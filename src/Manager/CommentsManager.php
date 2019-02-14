@@ -40,7 +40,13 @@ class CommentsManager
     //Get Avarage for one event
     public function getAverage(Event $event)
     {
-        return $this->commentsRepository->getMoyenne($event);
+        return $this->commentsRepository->getAverage($event);
+    }
+
+    //Get Id of Events who was noted
+    public function getEventRating()
+    {
+        return $this->commentsRepository->getEventRating();
     }
 
     //Get all User Id Rated Events
@@ -54,4 +60,5 @@ class CommentsManager
     {
         return $this->commentsRepository->userLastRate($user);
     }
+
 }

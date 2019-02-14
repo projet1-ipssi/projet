@@ -19,11 +19,12 @@ class MailerService
 
     public function __construct(\Swift_Mailer $mailer, \Twig_Environment $templates)
     {
-        $this->mailer=$mailer;
-        $this->templates= $templates;
+        $this->mailer = $mailer;
+        $this->templates = $templates;
     }
 
-    public function sendMail(User $user, Event $event){
+    public function sendMail(User $user, Event $event)
+    {
         $message = (new \Swift_Message("Une conférence vient d'être créer !"))
             ->setFrom('admin@projet.com')
             ->setTo($user->getEmail())
@@ -32,12 +33,11 @@ class MailerService
                 // templates/emails/registration.html.twig
                     'emails/index.html.twig',
                     ['user' => $user,
-                        'event'=>$event,
-                        'title'=>"Une conférence vient d'être créer !"]
+                        'event' => $event,
+                        'title' => "Une conférence vient d'être créer !"]
                 ),
                 'text/html'
-            )
-            /*
+            )/*
              * If you also want to include a plaintext version of the message
             ->addPart(
                 $this->renderView(

@@ -18,15 +18,14 @@ class AddEventType extends AbstractType
         $builder
             ->add('title')
             ->add('picture')
-            ->add('startDate', DateTimeType::class,[
+            ->add('startDate', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('endDate', DateTimeType::class,[
+            ->add('endDate', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
             ->add('description', TextareaType::class, array('required' => false))
-            ->add('submit', SubmitType::class)
-        ;
+            ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -350,7 +350,7 @@ class AdminController extends AbstractController
     //Ajax request Admin Rating Events
 
     /**
-     * @Route("/admin/event_rating/ajax", name="event_ajax_admin_rating")
+     * @Route("/admin/all_event_rating/ajax", name="event_ajax_admin_rating")
      */
     public function EventAjax(Request $request)
     {

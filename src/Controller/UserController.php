@@ -40,7 +40,7 @@ class UserController extends AbstractController
             'html' => $this->renderView('home/event.html.twig', [
                 'event' => $event,
                 'vote' => $vote,
-                'moyenne'=>$avg
+                'moyenne' => $avg
             ])
         ];
     }
@@ -100,8 +100,8 @@ class UserController extends AbstractController
         $namepage = 'My Rated Event';
 
         $user = $this->getUser();
-        $events = $this->commentsManager->findBy(['user'=>$user]);
-        $nbEvents = (count($events)/6);
+        $events = $this->commentsManager->findBy(['user' => $user]);
+        $nbEvents = (count($events) / 6);
 
 
         //Give number page for paging
@@ -143,8 +143,8 @@ class UserController extends AbstractController
 
         return $this->json([
             'results' => $results,
-            'title'=>$title,
-            'page'=>$page
+            'title' => $title,
+            'page' => $page
         ]);
     }
 }
