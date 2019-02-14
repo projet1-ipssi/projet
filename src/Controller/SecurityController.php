@@ -20,6 +20,7 @@ class SecurityController extends AbstractController
     {
         $this->em = $em;
     }
+
     /**
      * @Route("/register", name="register")
      */
@@ -41,7 +42,7 @@ class SecurityController extends AbstractController
 
         }
 
-            return $this->render('security/register.html.twig', [
+        return $this->render('security/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -55,10 +56,7 @@ class SecurityController extends AbstractController
 
         $form = $this->createForm(LoginUserType::class, $user);
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        $this->addFlash('success', 'Login success !');
-        $this->redirectToRoute('home');
-
+        
         return $this->render('security/login.html.twig', [
             'error' => $error ? $error->getMessage() : null,
             'form' => $form->createView()
@@ -66,11 +64,28 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/login/success", name="login_success")
+     */
+    public function loginSuccess()
+    {
+        $user = $this->getUser();
+        $role = $user->getRoles();
+        if (in_array("ROLE_ADMIN", $role)) {
+            $this->addFlash('success', 'Login success !');
+            return $this->redirectToRoute('admin');
+        } else {
+            $this->addFlash('success', 'Login success !');
+            return $this->redirectToRoute('user');
+        }
+    }
+
+
+    /**
      * @Route("/logout", name="logout")
      */
     public function logout()
     {
-        if($this->getUser()) {
+        if ($this->getUser()) {
             $this->get('security.token_storage')->setToken(null);
             $this->get('session')->invalidate();
         }
