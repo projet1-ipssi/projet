@@ -5,9 +5,10 @@ namespace App\Controller;
 use App\Entity\Comments;
 use App\Entity\Event;
 use App\Form\RegisterUserType;
+use App\Manager\CommentsManager;
+use App\Manager\EventManager;
 use App\Repository\CommentsRepository;
 use App\Repository\EventRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,17 +17,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    private $userRepository;
-    private $eventRepository;
-    private $commentsRepository;
-    private $em;
+    private $eventManager;
+    private $commentsManager;
 
-    public function __construct(UserRepository $userRepository, EventRepository $eventRepository, CommentsRepository $commentsRepository, EntityManagerInterface $em)
+    public function __construct(EventManager $eventManager, CommentsManager $commentsManager)
     {
-        $this->userRepository = $userRepository;
-        $this->eventRepository = $eventRepository;
-        $this->commentsRepository = $commentsRepository;
-        $this->em = $em;
+        $this->eventManager = $eventManager;
+        $this->commentsManager = $commentsManager;
     }
 
     protected function prepareResult(Event $event)
@@ -34,7 +31,7 @@ class UserController extends AbstractController
         $vote = false;
         $user = $this->getUser();
         if ($user) {
-            $comment = $this->getDoctrine()->getRepository(Comments::class)->findOneBy(['user' => $user, 'event' => $event]);
+            $comment = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
             if ($comment) {
                 $vote = true;
             }
@@ -57,7 +54,7 @@ class UserController extends AbstractController
     {
         $namepage = 'Dashboard';
         $user = $this->getUser();
-        $events = $this->commentsRepository->userLastRate($user);
+        $events = $this->commentsManager->userLastRateEvent($user);
 
         return $this->render('user/dashboard.html.twig', [
             'namepage' => $namepage,
@@ -103,15 +100,21 @@ class UserController extends AbstractController
     public function EventWithRating()
     {
         $namepage = 'My Rated Event';
+
         $user = $this->getUser();
-        $events = $this->commentsRepository->findBy(['user'=>$user]);
+        $events = $this->commentsManager->findBy(['user'=>$user]);
         $nbEvents = (count($events)/6);
+
+
+        //Give number page for paging
+        $nb = $this->eventManager->getNumberPage($nbEvents);
+
         $page = 0;
 
         return $this->render('user/event/my-rating.html.twig', [
             'events' => $events,
             'namepage' => $namepage,
-            'nbEvents' => $nbEvents,
+            'nb' => $nb,
             'page' => $page
         ]);
     }
@@ -119,21 +122,22 @@ class UserController extends AbstractController
     /**
      * @Route("/user/event_rating/ajax", name="event_ajax_user_rating")
      */
-    public function EventAjax(Request $request)
+    public function EventAjax(Request $request, CommentsRepository $commentsRepository, EventRepository $eventRepository)
     {
         $now = new \DateTime();
         $results = [];
         $title = $request->get('title');
         $page = $request->get('page');
         $user = $this->getUser();
-        $ids = $this->commentsRepository->getUserEventRating($user);
+        $ids = $commentsRepository->getUserEventRating($user);
 
-        $events = $this->eventRepository->getEventUserByTitle($title, $now, $page, $ids);
+        $events = $eventRepository->getEventUserByTitle($title, $now, $page, $ids);
+
 
         $user = $this->getUser();
         if ($user) {
             foreach ($events as $event) {
-                $comments = $this->commentsRepository->findOneBy(['user' => $user, 'event' => $event]);
+                $comments = $this->commentsManager->findOneBy(['user' => $user, 'event' => $event]);
                 if ($comments) {
                     $results[] = $this->prepareResult($event);
                 }
