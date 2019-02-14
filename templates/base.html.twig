@@ -20,7 +20,7 @@
     {% endblock %}
 </head>
 
-{% if 'user' in app.request.uri or 'admin' in app.request.uri%}
+{% if 'user' in app.request.uri or 'admin' in app.request.uri %}
 <body class="grey lighten-3">
 {% else %}
 <body>
@@ -44,34 +44,34 @@
         {% endif %}
         <a style="margin: auto;"><strong></strong></a>
         <a class="navbar waves-effect" href="{{ path('eventRating') }}">
-            <strong style="color:#00c851">Conferences with rating</strong>
+            <strong class="blue-text">Conferences with rating</strong>
         </a>
         <a class="navbar waves-effect" href="{{ path('eventWithoutRating') }}">
-            <strong class="grey-text">Conferences without rating</strong>
+            <strong class="red-text">Conferences without rating</strong>
         </a>
     </div>
 
     <div class="">
         {% if is_granted('ROLE_USER') %}
-            <a style="font-size: 18px;" href="{{ path('user-profile') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('user-profile') }}">
                 <strong class="blue-text">{{ app.user.email }}</strong>
             </a><br>
-            <a style="font-size: 18px;" href="{{ path('logout') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('logout') }}">
                 <strong class="blue-text">Log out</strong>
             </a>
         {% elseif is_granted('ROLE_ADMIN') %}
             Log in
-            <a style="font-size: 18px;" href="{{ path('admin-profile') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('admin-profile') }}">
                 <strong class="blue-text">{{ app.user.email }}</strong>
             </a><br>
-            <a style="font-size: 18px;" href="{{ path('logout') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('logout') }}">
                 <strong class="blue-text">Log out</strong>
             </a>
         {% else %}
-            <a style="font-size: 18px;" href="{{ path('login') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('login') }}">
                 <strong class="blue-text">Log in</strong>
             </a><br>
-            <a style="font-size: 18px;" href="{{ path('register') }}" target="_blank">
+            <a style="font-size: 18px;" href="{{ path('register') }}">
                 <strong class="blue-text">Register</strong>
             </a>
         {% endif %}

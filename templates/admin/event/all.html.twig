@@ -2,10 +2,10 @@
 
 {% block title %}{{ namepage }}{% endblock %}
 
-{% block allevent %}
-    <a href="{{ path('all-event') }}" class="list-group-item list-group-item-action waves-effect active">
-        <i class="fas fa-user mr-3"></i>{{ namepage }}</a>
-{% endblock %}
+                {% block allevent %}
+                    <a href="{{ path('all-event') }}" class="list-group-item list-group-item-action waves-effect active">
+                        <i class="fas fa-user mr-3"></i>{{ namepage }}</a>
+                {% endblock %}
 
 {% block namepage %}
     <span>{{ namepage }}</span>
@@ -13,28 +13,22 @@
 
 {% block body %}
 
-    <!-- List -->
     <div class="card mb-3 wow fadeIn" style="width: 55%; margin: auto;">
         <div class="card-body">
             <h1 align="center"><strong>{{ namepage }}</strong></h1>
+
             {% include 'search/search.html.twig' %}
-            <div class="card-body">
-                <div class="list-group" align="center">
-                    {% for event in events %}
-                        <button type="button" class="list-group-item list-group-item-action"><strong>{{ event.title }}</strong>
-                            <br><i> Du <span class="font-weight-bold">{{ event.startDate |date('d/m/Y') }}</span> au <span class="font-weight-bold">{{ event.endDate|date('d/m/Y') }}</span></i>
-                            <br><i>{{ event.description }}</i>
-                            <br>
-                            <a class="btn btn-success" href="{{ path('update-event', {'id': event.id}) }}">Update
-                                <i class="fa fa-refresh ml-2"></i>
-                            </a>
-                            <a class="btn btn-danger" href="{{ path('event-remove', {'id': event.id}) }}">Delete
-                                <i class="fa fa-trash ml-2"></i>
-                            </a>
-                        </button>
-                    {% endfor %}
-                </div>
+
+            <!-- Grid row -->
+            <div class="row home-event-js" data-endpoint="{{ path('all_event_ajax') }}" data-value="{{ nb }}">
+
+
             </div>
+            <!-- Grid row -->
+
+            {% include 'home/paging.html.twig' %}
+
         </div>
     </div>
+
 {% endblock %}

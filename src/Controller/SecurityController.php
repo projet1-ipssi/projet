@@ -20,26 +20,29 @@ class SecurityController extends AbstractController
     {
         $this->em = $em;
     }
+
     /**
      * @Route("/register", name="register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $user = new User();
+
         $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Registered !');
+            $this->em->persist($user);
+            $this->em->flush();
+
+            $this->addFlash('success', 'You are successfully Registered !');
             $this->redirectToRoute('home');
 
         }
 
-            return $this->render('security/register.html.twig', [
+        return $this->render('security/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -50,9 +53,10 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils)
     {
         $user = new User();
+
         $form = $this->createForm(LoginUserType::class, $user);
         $error = $authenticationUtils->getLastAuthenticationError();
-
+        
         return $this->render('security/login.html.twig', [
             'error' => $error ? $error->getMessage() : null,
             'form' => $form->createView()
@@ -66,7 +70,7 @@ class SecurityController extends AbstractController
     {
         $user = $this->getUser();
         $role = $user->getRoles();
-        if (in_array("ROLE_ADMIN",$role)) {
+        if (in_array("ROLE_ADMIN", $role)) {
             $this->addFlash('success', 'Login success !');
             return $this->redirectToRoute('admin');
         } else {
@@ -81,7 +85,7 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        if($this->getUser()) {
+        if ($this->getUser()) {
             $this->get('security.token_storage')->setToken(null);
             $this->get('session')->invalidate();
         }
