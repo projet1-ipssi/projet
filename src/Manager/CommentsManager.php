@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Entity\User;
 use App\Repository\CommentsRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
@@ -33,7 +34,7 @@ class CommentsManager
     }
 
     //User 3 Last Rated Event
-    public function userLastRateEvent() {
-        return $this->commentsRepository->userLastRate();
+    public function userLastRateEvent(User $user) {
+        return $this->commentsRepository->userLastRate($user);
     }
 }

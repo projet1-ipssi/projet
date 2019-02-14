@@ -28,12 +28,7 @@ class EventManager
     //Give number page for paging
     public function getNumberPage($nbEvents)
     {
-        if ($nbEvents % 6 === 0) {
-            $nb = round($nbEvents);
-        } else {
-            $nb = (round($nbEvents) + 1);
-        }
-        return $nb;
+        return round($nbEvents);
     }
 
 }

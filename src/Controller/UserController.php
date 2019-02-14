@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\Event;
 use App\Form\RegisterUserType;
 use App\Manager\CommentsManager;
 use App\Manager\EventManager;
+use App\Repository\CommentsRepository;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,10 +36,13 @@ class UserController extends AbstractController
                 $vote = true;
             }
         }
+        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
+
         return [
             'html' => $this->renderView('home/event.html.twig', [
                 'event' => $event,
-                'vote' => $vote
+                'vote' => $vote,
+                'moyenne'=>$avg
             ])
         ];
     }
@@ -48,14 +54,12 @@ class UserController extends AbstractController
     {
         $namepage = 'Dashboard';
         $user = $this->getUser();
-        $events = $this->eventManager->findAll();
-        $comments = $this->commentsManager->userLastRateEvent();
+        $events = $this->commentsManager->userLastRateEvent($user);
 
         return $this->render('user/dashboard.html.twig', [
             'namepage' => $namepage,
             'user' => $user,
             'events' => $events,
-            'comments' => $comments,
         ]);
     }
 
@@ -101,6 +105,7 @@ class UserController extends AbstractController
         $events = $this->commentsManager->findBy(['user'=>$user]);
         $nbEvents = (count($events)/6);
 
+
         //Give number page for paging
         $nb = $this->eventManager->getNumberPage($nbEvents);
 
@@ -117,13 +122,17 @@ class UserController extends AbstractController
     /**
      * @Route("/user/event_rating/ajax", name="event_ajax_user_rating")
      */
-    public function EventAjax(Request $request)
+    public function EventAjax(Request $request, CommentsRepository $commentsRepository, EventRepository $eventRepository)
     {
         $now = new \DateTime();
         $results = [];
         $title = $request->get('title');
         $page = $request->get('page');
-        $events = $this->eventManager->getEventByTitle($title, $now, $page);
+        $user = $this->getUser();
+        $ids = $commentsRepository->getUserEventRating($user);
+
+        $events = $eventRepository->getEventUserByTitle($title, $now, $page, $ids);
+
 
         $user = $this->getUser();
         if ($user) {

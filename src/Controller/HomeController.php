@@ -55,10 +55,12 @@ class HomeController extends AbstractController
                 $vote = true;
             }
         }
+        $avg = $this->getDoctrine()->getRepository(Comments::class)->getMoyenne($event);
             return [
                 'html' => $this->renderView('home/event.html.twig', [
                     'event' => $event,
                     'vote'=>$vote,
+                    'moyenne'=>$avg
                 ])
             ];
     }
