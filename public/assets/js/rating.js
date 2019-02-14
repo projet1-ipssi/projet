@@ -19,7 +19,10 @@ function setRatingStars(item_part, score)
 
 $(".environment-rating-stars").mouseover(function() {
     var score = this.getAttribute('data-value');
-    setRatingStars("#environment-rating-stars-", score);
+    var value = $("#environment_rating").attr('data-selected');
+    if (value == 0) {
+        setRatingStars("#environment-rating-stars-", score);
+    }
 });
 
 $("#environment-work-rating").mouseleave(function() {
@@ -29,9 +32,11 @@ $("#environment-work-rating").mouseleave(function() {
 
     $("#environment_rating").val(new_score);
     var score = $("#environment_rating").val();
-    console.log(score);
+    var value = $("#environment_rating").attr('data-selected');
 
-    setRatingStars("#environment-rating-stars-", score);
+    if (value == 0) {
+        setRatingStars("#environment-rating-stars-", score);
+    }
 })
 
 
