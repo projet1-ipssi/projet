@@ -2,6 +2,13 @@
 
 Comment installer le projet : 
 
+#### Automatique :
+
+Avec make:
+```bash
+make install
+```
+#### Manuel :
 - Lancer docker : `docker-compose up -d`
 - Accéder au container nginx : `docker-compose exec web /bin/bash`
 - Installer les dépendances avec composer : `composer install`
