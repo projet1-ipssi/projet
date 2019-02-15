@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}{{ namepage }}{% endblock %}
+
+{% block users %}
+    <a href="{{ path('all-users') }}" class="list-group-item list-group-item-action waves-effect active">
+        <i class="fas fa-user mr-3"></i>All Users</a>
+{% endblock %}
+
+{% block namepage %}
+    <span>{{ namepage }}</span>
+{% endblock %}
+
+{% block body %}
+
+
+    <!-- List -->
+    <div class="card mb-3 wow fadeIn" style="width: 55%; margin: auto;">
+        <div class="card-body">
+            <h1 align="center"><strong>{{ namepage }}</strong></h1>
+            <div class="list-group" align="center">
+                {% for user in users %}
+                    <button type="button" class="list-group-item list-group-item-action"><strong class="h4">{{ user.email }}</strong>
+                        <br>
+                        <a class="btn btn-success" href="{{ path('user-update', {'id': user.id}) }}">Update
+                            <i class="fa fa-refresh ml-2"></i>
+                        </a>
+                        <a class="btn btn-danger" href="{{ path('user-remove', {'id': user.id}) }}">Delete
+                            <i class="fa fa-trash ml-2"></i>
+                        </a>
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- List -->
+{% endblock %}

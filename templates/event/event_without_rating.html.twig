@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block body %}
+    <!-- Section: Blog v.2 -->
+    {% if (events|length)%6 == 0 %}
+        {% set nb = ((nbEvents|round(0,'floor'))) %}
+    {% else %}
+        {% set nb = ((nbEvents|round(0,'floor'))+1) %}
+    {% endif %}
+
+    <section class="text-center my-5" style="width: 90%; margin: auto;">
+
+        <!-- Section heading -->
+        <h2 class="h1-responsive font-weight-bold my-5">Conferences without rating</h2>
+        <!-- Section description -->
+        <p class="dark-grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate velit
+            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+            qui officia deserunt mollit anim id est laborum.</p>
+
+        {% include 'search/search.html.twig' %}
+
+        <!-- Grid row -->
+        <div class="row home-event-js" data-endpoint="{{ path('event_ajax_without_rating') }}" data-value="{{ nb }}">
+
+
+        </div>
+        <!-- Grid row -->
+
+    </section>
+    <!-- Section: Blog v.2 -->
+
+    {% include 'home/paging.html.twig' %}
+
+{% endblock %}

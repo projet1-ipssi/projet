@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin Template{% endblock %}
+
+{% block accountnavigation %}
+    <!--Main Navigation-->
+    <header>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed"
+             style="z-index: 1030; margin: 90px 30px 30px 30px">
+
+            <a class="logo-wrapper waves-effect" style="margin-left: 45px;">
+                <img src="{{ asset('logo/logo-admin-png-4.png') }}"
+                     class="img-fluid" alt="">
+            </a>
+
+            <div class="list-group list-group-flush" style="width: 200px;">
+                {% block dashboard %}
+                    <a href="{{ path('admin') }}" class="list-group-item waves-effect">
+                        <i class="fas fa-chart-pie mr-3"></i>Dashboard
+                    </a>
+                {% endblock %}
+                {% block account %}
+                    <a href="{{ path('admin-profile') }}"
+                       class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-user mr-3"></i>My Account</a>
+                {% endblock %}
+                {% block event %}
+                    <a href="{{ path('AdminRating') }}" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fa fa-star mr-3"></i>My Rate Event</a>
+                {% endblock %}
+                {% block users %}
+                    <a href="{{ path('all-users') }}"
+                       class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-users mr-3"></i>All Users</a>
+                {% endblock %}
+                {% block allevent %}
+                    <a href="{{ path('all-event') }}" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-tags mr-3"></i>All Event</a>
+                {% endblock %}
+                <br><br>
+                {% block adduser %}
+                    <a href="{{ path('add-user') }}" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-user mr-3"></i>Add User</a>
+                {% endblock %}
+                {% block addevent %}
+                    <a href="{{ path('add-event') }}" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fas fa-tags mr-3"></i>Add Event</a>
+                {% endblock %}
+            </div>
+        </div>
+        <!-- Sidebar -->
+
+    </header>
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+    <main class="pt-5 mx-lg-5">
+        <div class="container-fluid mt-5" style="width: 60%;">
+
+            <!-- Heading -->
+            <div class="card mb-4 wow fadeIn">
+                <!--Card content-->
+                <div class="card-body d-sm-flex justify-content-between">
+
+                    <h4 class="mb-2 mb-sm-0 pt-1">
+                        <a href="{{ path('admin') }}" target="_blank">Home Page</a>
+                        <span>/</span>
+                        {% block namepage %}
+                        {% endblock %}
+                    </h4>
+
+                </div>
+
+            </div>
+            <!-- Heading -->
+        </div>
+    </main>
+{% endblock %}

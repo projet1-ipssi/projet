@@ -1,0 +1,20 @@
+{% extends 'emails/layout.html.twig' %}
+
+{% block body %}
+    <div>
+        <p>Bonjour {{ user.firstname }},</p>
+        <p>Une nouvelle conférence vient d'être créer !
+        </p>
+        <p>Titre : <strong>{{ event.title }}</strong></p>
+        <p>Date de début : <strong>{{ event.startDate|date('d/m/y') }}</strong></p>
+        <p>Date de fin : <strong>{{ event.endDate|date('d/m/y') }}</strong></p>
+        <p>Vener vite la noter</p>
+        <!--<p>Pour vérifier votre compte, veuillez cliquer sur le bouton ci-dessous</p>-->
+
+        <a href="{{ url('home') }}" target="_blank"
+           style="text-transform: uppercase; text-align: left; padding-right: 30px; min-width: 80px; color: #F35321;border: 1px solid rgb(39,58,96); background-color: #FFF; display: inline-block; vertical-align: middle; touch-action: manipulation; cursor: pointer; padding: 14px 13px; font-size: 16px; border-radius: 5px; text-decoration: none;">Accéder
+            à la plateforme</a>
+        <p>A très bientôt, </p>
+        <p>L'Equipe.</p>
+    </div>
+{% endblock %}

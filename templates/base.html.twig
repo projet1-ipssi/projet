@@ -1,12 +1,123 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('/') }}">
+    {% block stylesheets %}
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+              rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.6.1/css/mdb.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href="{{ asset('assets/css/stylesheet.css') }}" rel="stylesheet">
+
+    {% endblock %}
+</head>
+
+{% if 'user' in app.request.uri or 'admin' in app.request.uri %}
+<body class="grey lighten-3">
+{% else %}
+<body>
+{% endif %}
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+    <div class="container">
+
+        <a class="navbar-brand waves-effect" href="{{ path('home') }}">
+            <img src="{{ asset('logo/home.png') }}" height="45px">
+        </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="navbar waves-effect" style="margin: auto;" href="{{ path('admin') }}" target="_blank">
+                <strong class="red-text">Admin</strong>
+            </a>
+        {% endif %}
+        {% if is_granted('ROLE_USER') %}
+            <a class="navbar waves-effect" style="margin: auto;" href="{{ path('user') }}" target="_blank">
+                <strong class="blue-text">My account</strong>
+            </a>
+        {% endif %}
+        <a style="margin: auto;"><strong></strong></a>
+        <a class="navbar waves-effect" href="{{ path('eventRating') }}">
+            <strong class="blue-text">Conferences with rating</strong>
+        </a>
+        <a class="navbar waves-effect" href="{{ path('eventWithoutRating') }}">
+            <strong class="red-text">Conferences without rating</strong>
+        </a>
+    </div>
+
+    <div class="">
+        {% if is_granted('ROLE_USER') %}
+            <a style="font-size: 18px;" href="{{ path('user-profile') }}">
+                <strong class="blue-text">{{ app.user.email }}</strong>
+            </a><br>
+            <a style="font-size: 18px;" href="{{ path('logout') }}">
+                <strong class="blue-text">Log out</strong>
+            </a>
+        {% elseif is_granted('ROLE_ADMIN') %}
+            Log in
+            <a style="font-size: 18px;" href="{{ path('admin-profile') }}">
+                <strong class="blue-text">{{ app.user.email }}</strong>
+            </a><br>
+            <a style="font-size: 18px;" href="{{ path('logout') }}">
+                <strong class="blue-text">Log out</strong>
+            </a>
+        {% else %}
+            <a style="font-size: 18px;" href="{{ path('login') }}">
+                <strong class="blue-text">Log in</strong>
+            </a><br>
+            <a style="font-size: 18px;" href="{{ path('register') }}">
+                <strong class="blue-text">Register</strong>
+            </a>
+        {% endif %}
+    </div>
+</nav>
+<br><br><br>
+{% block message %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
+
+<!-- Navbar -->
+
+{% block accountnavigation %}{% endblock %}
+
+{% block body %}{% endblock %}
+{% block javascripts %}
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.6.1/js/mdb.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/event.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/rating.js') }}"></script>
+
+{% endblock %}
+
+{% block footer %}
+    <!--Copyright-->
+    <div class="footer-copyright py-3" align="center">
+        © 2019 Copyright:
+        <a href="#" target="_blank">Matthieu Paris | Baranyuk Anatoliy</a>
+    </div>
+    <!--/.Copyright-->
+{% endblock %}
+</body>
 </html>

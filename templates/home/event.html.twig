@@ -1,0 +1,68 @@
+{% block body %}
+    <!-- Section: Blog v.2 -->
+
+    <!-- Grid column -->
+    <div class="col-lg-4 col-md-12 mb-4">
+
+        <!-- Featured image -->
+        <div class="view overlay rounded z-depth-2 mb-4">
+            <img class="img-fluid" src="{% if event.picture != null %}{{ event.picture }} {% endif %}"
+                 alt="Sample image">
+            <a href="{{ path('event_profile', {'id':event.id}) }}">
+                <div class="mask rgba-white-slight"></div>
+            </a>
+        </div>
+
+        <!-- Category -->
+        <!-- Post title -->
+        <h4 class="font-weight-bold mb-3"><strong><a
+                        href="{{ path('event_profile', {'id':event.id}) }}">{{ event.title }}</a></strong></h4>
+        <!-- Post data -->
+        <p> du <a class="font-weight-bold">{{ event.startDate |date('d/m/Y') }} </a>à <a
+                    class="font-weight-bold">{{ event.startDate |date('H:m') }} </a></p>
+        <p> au <a class="font-weight-bold">{{ event.endDate |date('d/m/Y') }} </a>à <a
+                    class="font-weight-bold">{{ event.endDate |date('H:m') }} </a></p>
+        {% if moyenne %}
+            <p> {{ moyenne.average|round(1,'floor') }}/5 <i class="icon-star"></i></p>
+        {% endif %}
+
+        <!-- Excerpt -->
+        <p class="dark-grey-text block-ellipsis">{{ event.description|raw }}</p>
+        <!-- Read more button -->
+        {% if vote == false %}
+            <br>
+            <div class="row">
+                <div class="mx-auto">
+                    <a class="btn btn-primary btn-rounded btn-md" href="{{ path('event_profile', {'id':event.id}) }}"
+                       style="margin-top: 10px; margin-bottom: 10px;">Vote</a>
+                </div>
+            </div>
+        {% else %}
+            <br>
+            <strong class="font-weight-bold h5">You have already voted !</strong>
+        {% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            {% if 'admin' in app.request.uri %}
+                <div class="row">
+                    <div class="mx-auto">
+                        <a class="btn btn-success" href="{{ path('update-event', {'id': event.id}) }}">
+                            <i class="fas fa-sync"></i>
+                            Update
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mx-auto">
+                        <a class="btn btn-danger" href="{{ path('event-remove', {'id': event.id}) }}">
+                            <i class="fa fa-trash"></i>
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <!-- Grid column -->
+
+{% endblock %}

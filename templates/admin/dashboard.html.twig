@@ -1,0 +1,144 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ namepage }} {% endblock %}
+
+    {% block dashboard %}
+        <a href="{{ path('admin') }}" class="list-group-item waves-effect active">
+            <i class="fas fa-chart-pie mr-3"></i>{{ namepage }}
+        </a>
+    {% endblock %}
+
+    {% block namepage %}
+        <span>{{ namepage }}</span>
+    {% endblock %}
+
+{% block body %}
+
+    <!--Grid row-->
+    <div class="row wow fadeIn" style="margin-left: 22%;
+    width: 70%;">
+
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+                <!--Card content-->
+                <div class="card-body">
+                    <h2 align="center">Top 10 Events</h2>
+                    <!-- Table  -->
+                    <table class="table table-hover">
+                        <!-- Table head -->
+                        <thead class="blue-grey lighten-4">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Date Start</th>
+                            <th>Date End</th>
+                            <th>Rate</th>
+                        </tr>
+                        </thead>
+                        <!-- Table head -->
+
+                        <!-- Table body -->
+                        <tbody>
+                        {% set id = 1 %}
+                        {% for comment in comments %}
+                        <tr>
+                            <th scope="row">{{ id }}</th>
+                            <td> {{ comment.title }} </td>
+                            <td> {{ comment.startDate|date }}</td>
+                            <td> {{ comment.endDate|date }} </td>
+                            <td> {{ comment.average|round(1, 'floor') }}/5 </td>
+                        </tr>
+                                    {% set id = id + 1 %}
+                        {% endfor %}
+                        </tbody>
+                        <!-- Table body -->
+                    </table>
+                    <!-- Table  -->
+
+                </div>
+
+            </div>
+            <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+        <!-- List group links -->
+        <div class="list-group list-group-flush">
+            <a href="{{ path('all-event') }}" class="list-group-item list-group-item-action waves-effect">Events
+                <span class="badge badge-primary badge-pill pull-right">{{ events|length }}</span>
+            </a>
+            <a class="list-group-item list-group-item-action waves-effect">Noted
+                <span class="badge badge-success badge-pill pull-right">{{ comments|length }}</span>
+            </a>
+            <a class="list-group-item list-group-item-action waves-effect">Not noted
+                <span class="badge badge-danger badge-pill pull-right">{{ events|length-comments|length }}</span>
+            </a>
+            <a href="{{ path('all-users') }}" class="list-group-item list-group-item-action waves-effect">Users
+                <span class="badge badge-primary badge-pill pull-right">{{ users|length }}</span>
+            </a>
+        </div>
+        <!-- List group links -->
+
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+                <!--Card content-->
+                <div class="card-body">
+                    <h2 align="center">Last register Users</h2>
+
+                    <!-- Table  -->
+                    <table class="table table-hover">
+                        <!-- Table head -->
+                        <thead class="blue lighten-4">
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <!-- Table head -->
+
+                        <!-- Table body -->
+                        <tbody>
+                        {% set id = 1 %}
+                        {% for lastUser in lastUsers %}
+                            <tr>
+                                <th scope="row"><a href="{{ path('user-update', {'id': lastUser.id}) }}">{{ id }}</a>
+                                </th>
+                                <td>
+                                    <a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.firstname }} </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.lastname }} </a>
+                                </td>
+                                <td><a href="{{ path('user-update', {'id': lastUser.id}) }}"> {{ lastUser.email }} </a>
+                                </td>
+                            </tr>
+                            {% set id = id + 1 %}
+                        {% endfor %}
+                        </tbody>
+                        <!-- Table body -->
+                    </table>
+                    <!-- Table  -->
+
+                </div>
+
+            </div>
+            <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+{% endblock %}
