@@ -1,13 +1,13 @@
 
-install: .env docker init book
-
-docker: .env
-	docker-compose up -d
+install: init book
 
 init: docker
 	docker-compose exec web bash -c "composer install"
 	docker-compose exec web bash -c "php bin/console d:s:u --force"
 	docker-compose exec web bash -c "php bin/console hautelook:fixtures:load -q"
+
+docker: .env
+	docker-compose up -d
 
 .env:
 	cp .env.dist .env;
