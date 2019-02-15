@@ -120,11 +120,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/users/update/{id}", name="user-update")
      */
-    public function updateUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function updateUser($id, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $namepage = 'Update User';
 
-        $user = $this->getUser();
+        $user = $this->usersManager->find($id);
 
         $form = $this->createForm(RegisterUserType::class, $user);
         $form->handleRequest($request);
@@ -176,9 +176,19 @@ class AdminController extends AbstractController
     public function removeUser($id)
     {
         $user = $this->usersManager->find($id);
+        $comments = $this->commentsManager->findBy(['user' => $user]);
 
-        $this->em->remove($user);
-        $this->em->flush();
+        if ($user == $this->getUser()) {
+            $this->addFlash('danger', 'You can not delete your account !');
+            return $this->redirectToRoute('all-users');
+        } else {
+            foreach ($comments as $comment) {
+                $this->em->remove($comment);
+            }
+
+            $this->em->remove($user);
+            $this->em->flush();
+        }
 
         $this->addFlash('success', 'You are successfully remove user!');
         return $this->redirectToRoute('all-users');
@@ -308,9 +318,14 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/event/remove/{id}", name="event-remove")
      */
-    public function removeVideo($id)
+    public function removeEvent($id)
     {
         $event = $this->eventsManager->find($id);
+        $comments = $this->commentsManager->findBy(['event' => $event]);
+
+        foreach ($comments as $comment) {
+            $this->em->remove($comment);
+        }
 
         $this->em->remove($event);
         $this->em->flush();
