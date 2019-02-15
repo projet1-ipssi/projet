@@ -26,10 +26,22 @@ php bin/console app:create-admin email@email.fr motDePasse
 
 ## Run 
 
-Pour accéder au projet : 
+##### Pour accéder au projet : 
 
 ```bash
 localhost:8000
+```
+
+##### Pour acceder à phpMyAdmin :
+```bash
+localhost:8080
+```
+- Utilisateur : root
+- Mot de passe :  root
+
+##### Pour acceder à MailHog :
+```bash
+localhost:8025
 ```
 
 ## Technologie
@@ -55,6 +67,7 @@ Le projet consiste à faire voter en ligne des conférences par les utilisateurs
 ##### Un utilisateur peut accéder à son dashboard et ainsi :
 
 - Voir les conférences qu'il a noté
+- Voir la liste des 5 dernières conférences que l'utilisateur a votée
 - Modifier ses données
 - Voter une conférence de 1 à 5
 
@@ -68,3 +81,6 @@ Le projet consiste à faire voter en ligne des conférences par les utilisateurs
 - Créer un utilisateur
 - Voir les conférences qu'il a noté
 - Modifier ses données
+
+##### Images générée par les fixtures
+Les images générées par les fixtures sont de lien dynamique.À chaque rechargement de page l'image change.
