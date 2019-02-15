@@ -113,7 +113,8 @@ class UserController extends AbstractController
             'events' => $events,
             'namepage' => $namepage,
             'nb' => $nb,
-            'page' => $page
+            'page' => $page,
+            'nbEvents'=>$nbEvents
         ]);
     }
 
